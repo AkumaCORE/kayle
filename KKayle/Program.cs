@@ -45,6 +45,9 @@ namespace Kayle
             Game.OnUpdate += Game_OnUpdate;
 
         }
+
+
+        //---------//
         // Start Game
         // Game On Start
         static void Game_OnStart(EventArgs args)
