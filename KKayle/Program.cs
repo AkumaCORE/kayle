@@ -196,6 +196,7 @@ namespace Kayle
 
         public static void Game_OnUpdate(EventArgs args)
         {
+            AutoHeal();
             var alvo = TargetSelector.GetTarget(1000, DamageType.Mixed);
             if (!alvo.IsValid()) return;
 
