@@ -92,7 +92,7 @@ namespace Kayle
             FarmMenu.Add("ManaF", new Slider("Nao usar Skills quando mana for <=", 30));
             
             // Heal Menu
-            var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).ToArray();
+            var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
             HealMenu = Menu.AddSubMenu("Heal", "FarmKayle");
             HealMenu.Add("autoW", new CheckBox("Usar W automaticamente", true));
             HealMenu.Add("HealSelf", new Slider("Usar W em si quando % HP", 50));
@@ -115,8 +115,9 @@ namespace Kayle
             }
 
 
-
-            // Draw Menu
+            //------------//
+            //-Draw Menu-//
+            //----------//
             DrawMenu = Menu.AddSubMenu("Draws", "DrawKayle");
             // DrawMenu.Add("drawDisable", new CheckBox("Desabilidatar todos os Draw", false));
             DrawMenu.Add("drawAA", new CheckBox("Desabilidatar Draw do AA", true));
@@ -128,9 +129,9 @@ namespace Kayle
 
         }
 
-        // <Draw Game//
+        // ------------//
         // Game OnDraw//
-        // ------------- //
+        // --------- //
 
         public static void Game_OnDraw(EventArgs args)
         {
@@ -185,8 +186,8 @@ namespace Kayle
         }
 
         //-------------//
-        //----Ultimate--//
-        //------------//
+        //--Ultimate--//
+        //-----------//
         private static void AutoUlt()
         {
             if (!R.IsReady())
@@ -222,7 +223,7 @@ namespace Kayle
 
 
         // ------------//
-        // Game On Update
+        // Game On Update//
         // ------------//
 
         public static void Game_OnUpdate(EventArgs args)
