@@ -80,7 +80,7 @@ namespace Kayle
             
             // Heal Menu
             var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
-            HealMenu = Menu.AddSubMenu("Heal", "FarmKayle");
+            HealMenu = Menu.AddSubMenu("Heal", "HealKayle");
             HealMenu.Add("autoW", new CheckBox("Usar W automaticamente", true));
             HealMenu.Add("HealSelf", new Slider("Usar W em si quando % HP", 50));
             HealMenu.Add("HealAlly", new Slider("Usar W nos aliados quando % HP", 50));
@@ -92,7 +92,7 @@ namespace Kayle
             //--------------//
             //---Ultmate---//
             //------------//
-            UltMenu = Menu.AddSubMenu("Ultimate", "ult");
+            UltMenu = Menu.AddSubMenu("Ultimate", "UltKayle");
             UltMenu.Add("autoR", new CheckBox("Usar Ultimate automaticamente", true));
             UltMenu.Add("UltSelf", new Slider("Usar R em si quando % HP", 20));
             UltMenu.Add("UltAlly", new Slider("Usar R em aliados quando % HP", 20));
