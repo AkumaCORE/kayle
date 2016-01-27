@@ -14,8 +14,15 @@ namespace Kayle
 {
     class KKayle
     {
+       
+        public static Menu Menu,
+                            DrawMenu,
+                            ComboMenu,
+                            HarassMenu,
+                            FarmMenu,
+                            HealMenu,
+                            UltMenu;
 
-        public static Menu Menu, DrawMenu, ComboMenu, HarassMenu, FarmMenu, HealMenu;
         public static Spell.Targeted Q;
         public static Spell.Targeted W;
         public static Spell.Active E;
@@ -76,12 +83,14 @@ namespace Kayle
             HarassMenu.Add("HarassQ", new CheckBox("Usar Q no Harass", true));
             HarassMenu.Add("HarassW", new CheckBox("Usar W no Harass", false));
             HarassMenu.Add("HarassE", new CheckBox("Usar E no Harass", true));
+            HarassMenu.Add("ManaH", new Slider("Nao usar Skill quando mana for <=", 30));
 
-            /* Farm Menu
+             //Farm Menu
             FarmMenu = Menu.AddSubMenu("Farm", "FarmKayle");
             FarmMenu.Add("FarmQ", new CheckBox("Usar Q para Farmar", true));
             FarmMenu.Add("FarmE", new CheckBox("Usar E para Farmar", true));
-            */
+            FarmMenu.Add("ManaF", new Slider("Nao usar Skills quando mana for <=", 30));
+            
             // Heal Menu
             var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).ToArray();
             HealMenu = Menu.AddSubMenu("Heal", "FarmKayle");
@@ -92,11 +101,23 @@ namespace Kayle
             {
                 HealMenu.Add("autoHeal_" + a.BaseSkinName, new CheckBox("Usar Heal nos champs " + a.BaseSkinName));
             }
+            
+            //--------------//
+            //---Ultmate---//
+            //------------//
+            UltMenu = Menu.AddSubMenu("Ultimate", "ult");
+            UltMenu.Add("autoR", new CheckBox("Usar Ultimate automaticamente", true));
+            UltMenu.Add("UltSelf", new Slider("Usar R em si quando % HP", 20));
+            UltMenu.Add("UltAlly", new Slider("Usar R em aliados quando % HP", 20));
+            foreach (var a in allies)
+            {
+                HealMenu.Add("autoUlt_" + a.BaseSkinName, new CheckBox("Use Ult on " + a.BaseSkinName));
+            }
 
 
 
             // Draw Menu
-            DrawMenu = Menu.AddSubMenu("Drwans", "DrawnKayle");
+            DrawMenu = Menu.AddSubMenu("Draws", "DrawKayle");
             // DrawMenu.Add("drawDisable", new CheckBox("Desabilidatar todos os Draw", false));
             DrawMenu.Add("drawAA", new CheckBox("Desabilidatar Draw do AA", true));
             DrawMenu.Add("drawQ", new CheckBox("Desabilidatar Draw do Q", true));
@@ -133,29 +154,9 @@ namespace Kayle
 
         }
 
-
-        /*private static void AutoHeal()
-        {
-           
-            var autoWSelf = HealMenu["HealSelf"].Cast<Slider>().CurrentValue;
-            var autoWAlly = HealMenu["HealAlly"].Cast<Slider>().CurrentValue;
-
-            if (HealMenu["autoW"].Cast<CheckBox>().CurrentValue && W.IsReady())
-            {
-                var lowestHealthAlly = EntityManager.Heroes.Allies.OrderBy(a => a.Health).FirstOrDefault(a => W.IsInRange(a) && !a.IsMe);
-
-                if (lowestHealthAlly != null)
-                {
-                    if (lowestHealthAlly.HealthPercent <= autoWAlly && PlayerInstance.HealthPercent >= autoWSelf)
-                    {
-                        if (HealMenu["autoHeal_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
-                        {
-                            W.Cast(lowestHealthAlly);
-                        }
-                    }
-                }
-            }
-        }*/
+        //-----//
+       // Heal //
+      // -----//
         private static void AutoHeal()
         {
             if (!W.IsReady())
@@ -172,13 +173,43 @@ namespace Kayle
 
             else if (lowestHealthAlly != null)
             {
-                if (!(lowestHealthAlly.Health <= HealMenu["autoW"].Cast<Slider>().CurrentValue))
+                if (!(lowestHealthAlly.Health <= HealMenu["HealAlly"].Cast<Slider>().CurrentValue))
+                {
+                    return;
+                }
+                if (HealMenu["autoUlt_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
+                {
+                    W.Cast(lowestHealthAlly);
+                }
+            }
+        }
+
+        //-------------//
+        //----Ultimate--//
+        //------------//
+        private static void AutoUlt()
+        {
+            if (!R.IsReady())
+            {
+                return;
+            }
+
+            var lowestHealthAlly = EntityManager.Heroes.Allies.Where(a => W.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
+
+            if (HealthPercent() <= HealMenu["UltSelf"].Cast<Slider>().CurrentValue)
+            {
+                R.Cast(PlayerInstance);
+            }
+
+            else if (lowestHealthAlly != null)
+            {
+                if (!(lowestHealthAlly.Health <= HealMenu["UltAlly"].Cast<Slider>().CurrentValue))
                 {
                     return;
                 }
                 if (HealMenu["autoHeal_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
                 {
-                    W.Cast(lowestHealthAlly);
+                    R.Cast(lowestHealthAlly);
                 }
             }
         }
@@ -197,6 +228,7 @@ namespace Kayle
         public static void Game_OnUpdate(EventArgs args)
         {
             AutoHeal();
+            AutoUlt();
             var alvo = TargetSelector.GetTarget(1000, DamageType.Mixed);
             if (!alvo.IsValid()) return;
 
@@ -205,7 +237,7 @@ namespace Kayle
             //-------------//
             if (Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.Combo)
             {
-                if (Q.IsReady())
+                if (Q.IsReady() && Q.IsInRange(alvo))
                 {
                     Q.Cast(alvo);
                 }
@@ -223,9 +255,9 @@ namespace Kayle
             //-------------//
             //---Harass----//
             //-------------//
-            if (Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.Harass)
+            if ((Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.Harass) && _Player.ManaPercent >= HarassMenu["ManaH"].Cast<Slider>().CurrentValue)
             {
-                if (Q.IsReady() && HarassMenu["HarassQ"].Cast<CheckBox>().CurrentValue)
+                if (Q.IsReady() && Q.IsInRange(alvo) && HarassMenu["HarassQ"].Cast<CheckBox>().CurrentValue)
                 {
 
                     Q.Cast(alvo);
@@ -244,6 +276,30 @@ namespace Kayle
             //-------------//
             //-----Farm----//
             //-------------//
+
+            if ((Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.LaneClear) && _Player.ManaPercent >= HarassMenu["ManaF"].Cast<Slider>().CurrentValue)
+            {
+                if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
+                {
+                    var minion =
+                EntityManager.MinionsAndMonsters.GetLaneMinions()
+                    .OrderByDescending(m => m.Health)
+                    .FirstOrDefault(m => m.IsValidTarget(Q.Range));
+
+                    if (Q.IsReady() && minion.IsValidTarget(Q.Range))
+                    {
+                        Q.Cast(minion);
+                    }
+                    if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue)
+                    {
+                        E.Cast(minion);
+                    }
+
+                }
+
+
+
+            }
 
 
 
