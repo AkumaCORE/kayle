@@ -122,9 +122,10 @@ namespace Kayle
 
         public static void Game_OnDraw(EventArgs args)
         {
+      
             if (DrawMenu["drawAA"].Cast<CheckBox>().CurrentValue)
             {
-                new Circle() { Color = Color.White, Radius = ObjectManager.Player.GetAutoAttackRange(), BorderWidth = 2f }.Draw(_Player.Position);
+                new Circle() { Color = Color.White, Radius = _Player.GetAutoAttackRange(), BorderWidth = 2f }.Draw(_Player.Position);
             }
             if (DrawMenu["drawQ"].Cast<CheckBox>().CurrentValue)
             {
