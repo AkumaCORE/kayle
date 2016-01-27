@@ -15,19 +15,12 @@ namespace Kayle
     class KKayle
     {
        
-        public static Menu Menu,
-                            DrawMenu,
-                            ComboMenu,
-                            HarassMenu,
-                            FarmMenu,
-                            HealMenu,
-                            UltMenu;
+        public static Menu Menu, DrawMenu, ComboMenu, HarassMenu, FarmMenu, HealMenu, UltMenu;
 
         public static Spell.Targeted Q;
         public static Spell.Targeted W;
         public static Spell.Active E;
         public static Spell.Targeted R;
-        public const string ChampionName = "Kayle";
 
         public static AIHeroClient PlayerInstance
         {
@@ -59,12 +52,6 @@ namespace Kayle
         // Game On Start
         static void Game_OnStart(EventArgs args)
         {
-            if (ChampionName != PlayerInstance.BaseSkinName)
-            {
-                return;
-            }
-            Bootstrap.Init(null);
-
             Chat.Print("KKayle Addon");
             Q = new Spell.Targeted(SpellSlot.Q, 650);
             W = new Spell.Targeted(SpellSlot.W, 900);
