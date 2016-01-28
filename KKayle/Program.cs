@@ -317,7 +317,7 @@ namespace Kayle
                     }
                     if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue)
                     {
-                        E.Cast(minion);
+                        E.Cast();
                     }
 
                 }
