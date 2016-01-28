@@ -109,17 +109,20 @@ namespace Kayle
                 {
                     HealMenu.Add("autoHeal_" + a.BaseSkinName, new CheckBox("Usar Heal nos champs " + a.BaseSkinName));
                 }
+                
 
                 //--------------//
                 //---Ultmate---//
                 //------------//
+
+                var ally = EntityManager.Heroes.Allies.Where(b => !b.IsMe).OrderBy(b => b.BaseSkinName);
                 UltMenu = Menu.AddSubMenu("Ultimate", "UltKayle");
                 UltMenu.Add("autoR", new CheckBox("Use Ultimate ", true));
                 UltMenu.Add("UltSelf", new Slider("Self Ultimate % HP", 20));
                 UltMenu.Add("UltAlly", new Slider("Ally Ultimate when  % HP", 20));
-                foreach (var a in allies)
+                foreach (var b in ally)
                 {
-                    HealMenu.Add("autoUlt_" + a.BaseSkinName, new CheckBox("Use Ult on " + a.BaseSkinName));
+                    HealMenu.Add("autoUlt_" + b.BaseSkinName, new CheckBox("Use Ult on " + b.BaseSkinName));
                 }
 
 
@@ -208,22 +211,22 @@ namespace Kayle
                 return;
             }
 
-            var lowestHealthAlly = EntityManager.Heroes.Allies.Where(a => W.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
+            var lowestHealthAllies = EntityManager.Heroes.Allies.Where(b => R.IsInRange(b) && !b.IsMe).OrderBy(b => b.Health).FirstOrDefault();
 
             if (HealthPercent() <= HealMenu["UltSelf"].Cast<Slider>().CurrentValue)
             {
                 R.Cast(PlayerInstance);
             }
 
-            else if (lowestHealthAlly != null)
+            else if (lowestHealthAllies != null)
             {
-                if (!(lowestHealthAlly.Health <= HealMenu["UltAlly"].Cast<Slider>().CurrentValue))
+                if (!(lowestHealthAllies.Health <= HealMenu["UltAlly"].Cast<Slider>().CurrentValue))
                 {
                     return;
                 }
-                if (HealMenu["autoUlt_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
+                if (HealMenu["autoUlt_" + lowestHealthAllies.BaseSkinName].Cast<CheckBox>().CurrentValue)
                 {
-                    R.Cast(lowestHealthAlly);
+                    R.Cast(lowestHealthAllies);
                 }
             }
         }
@@ -311,7 +314,7 @@ namespace Kayle
 
                 if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
                 {
-                  
+                    if (minion == null) return;
 
                     if (Q.IsReady() && minion.IsValidTarget(Q.Range))
                     {
