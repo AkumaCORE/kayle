@@ -122,7 +122,7 @@ namespace Kayle
                 UltMenu.Add("UltAlly", new Slider("Ally Ultimate when  % HP", 20));
                 foreach (var a in ally)
                 {
-                    HealMenu.Add("autoUlt_" + a.BaseSkinName, new CheckBox("Use Ult on " + a.BaseSkinName));
+                    UltMenu.Add("autoUlt_" + a.BaseSkinName, new CheckBox("Use Ult on " + a.BaseSkinName));
                 }
 
 
