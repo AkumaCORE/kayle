@@ -63,27 +63,27 @@ namespace Kayle
             Menu.AddLabel("Criado por Bruno105");
             // Combo Menu
             ComboMenu = Menu.AddSubMenu("Combo", "ComboKayle");
-            ComboMenu.Add("ComboW", new CheckBox("Usar W no Combo", true));
+            ComboMenu.Add("ComboW", new CheckBox("Use W on Combo", true));
 
             // Harass Menu
             HarassMenu = Menu.AddSubMenu("Harass", "HarassKayle");
-            HarassMenu.Add("HarassQ", new CheckBox("Usar Q no Harass", true));
-            HarassMenu.Add("HarassW", new CheckBox("Usar W no Harass", false));
-            HarassMenu.Add("HarassE", new CheckBox("Usar E no Harass", true));
-            HarassMenu.Add("ManaH", new Slider("Nao usar Skill quando mana for <=", 30));
+            HarassMenu.Add("HarassQ", new CheckBox("Use Q on Harass", true));
+            HarassMenu.Add("HarassW", new CheckBox("Use W on Harass", false));
+            HarassMenu.Add("HarassE", new CheckBox("Use E on Harass", true));
+            HarassMenu.Add("ManaH", new Slider("No use Skill When Mana  <=", 30));
 
              //Farm Menu
             FarmMenu = Menu.AddSubMenu("Farm", "FarmKayle");
-            FarmMenu.Add("FarmQ", new CheckBox("Usar Q para Farmar", true));
-            FarmMenu.Add("FarmE", new CheckBox("Usar E para Farmar", true));
-            FarmMenu.Add("ManaF", new Slider("Nao usar Skills quando mana for <=", 30));
+            FarmMenu.Add("FarmQ", new CheckBox("Use Q to Farm", true));
+            FarmMenu.Add("FarmE", new CheckBox("Usar E to Farm", true));
+            FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 30));
             
             // Heal Menu
             var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
             HealMenu = Menu.AddSubMenu("Heal", "HealKayle");
-            HealMenu.Add("autoW", new CheckBox("Usar W automaticamente", true));
-            HealMenu.Add("HealSelf", new Slider("Usar W em si quando % HP", 50));
-            HealMenu.Add("HealAlly", new Slider("Usar W nos aliados quando % HP", 50));
+            HealMenu.Add("autoW", new CheckBox("Usar W automatic", true));
+            HealMenu.Add("HealSelf", new Slider("Self W when % HP", 50));
+            HealMenu.Add("HealAlly", new Slider("Heal Ally when % HP", 50));
             foreach (var a in allies)
             {
                 HealMenu.Add("autoHeal_" + a.BaseSkinName, new CheckBox("Usar Heal nos champs " + a.BaseSkinName));
@@ -93,9 +93,9 @@ namespace Kayle
             //---Ultmate---//
             //------------//
             UltMenu = Menu.AddSubMenu("Ultimate", "UltKayle");
-            UltMenu.Add("autoR", new CheckBox("Usar Ultimate automaticamente", true));
-            UltMenu.Add("UltSelf", new Slider("Usar R em si quando % HP", 20));
-            UltMenu.Add("UltAlly", new Slider("Usar R em aliados quando % HP", 20));
+            UltMenu.Add("autoR", new CheckBox("Use Ultimate ", true));
+            UltMenu.Add("UltSelf", new Slider("Self Ultimate % HP", 20));
+            UltMenu.Add("UltAlly", new Slider("Ally Ultimate when  % HP", 20));
             foreach (var a in allies)
             {
                 HealMenu.Add("autoUlt_" + a.BaseSkinName, new CheckBox("Use Ult on " + a.BaseSkinName));
@@ -107,10 +107,10 @@ namespace Kayle
             //----------//
             DrawMenu = Menu.AddSubMenu("Draws", "DrawKayle");
             // DrawMenu.Add("drawDisable", new CheckBox("Desabilidatar todos os Draw", false));
-            DrawMenu.Add("drawAA", new CheckBox("Desabilidatar Draw do AA", true));
-            DrawMenu.Add("drawQ", new CheckBox("Desabilidatar Draw do Q", true));
-            DrawMenu.Add("drawW", new CheckBox("Desabilidatar Draw do W", true));
-            DrawMenu.Add("drawE", new CheckBox("Desabilidatar Draw do E", true));
+            DrawMenu.Add("drawAA", new CheckBox("Desable Draw do AA", true));
+            DrawMenu.Add("drawQ", new CheckBox("Desable Draw do Q", true));
+            DrawMenu.Add("drawW", new CheckBox("Desable Draw do W", true));
+            DrawMenu.Add("drawE", new CheckBox("Desabile Draw do E", true));
 
 
 
