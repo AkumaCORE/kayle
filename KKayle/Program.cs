@@ -166,7 +166,7 @@ namespace Kayle
                 {
                     return;
                 }
-                if (HealMenu["autoUlt_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
+                if (HealMenu["autoHeal_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
                 {
                     W.Cast(lowestHealthAlly);
                 }
@@ -196,7 +196,7 @@ namespace Kayle
                 {
                     return;
                 }
-                if (HealMenu["autoHeal_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
+                if (HealMenu["autoUlt_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
                 {
                     R.Cast(lowestHealthAlly);
                 }
