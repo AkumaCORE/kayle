@@ -143,7 +143,7 @@ namespace Kayle
 
             }
         
-
+         
         // ------------//
         // Game OnDraw//
         // --------- //
@@ -213,14 +213,14 @@ namespace Kayle
 
             var lowestHealthAllies = EntityManager.Heroes.Allies.Where(a => R.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
 
-            if (HealthPercent() <= HealMenu["UltSelf"].Cast<Slider>().CurrentValue)
+            if (HealthPercent() <= UltMenu["UltSelf"].Cast<Slider>().CurrentValue)
             {
                 R.Cast(PlayerInstance);
             }
 
             else if (lowestHealthAllies != null)
             {
-                if (!(lowestHealthAllies.Health <= HealMenu["UltAlly"].Cast<Slider>().CurrentValue))
+                if (!(lowestHealthAllies.Health <= UltMenu["UltAlly"].Cast<Slider>().CurrentValue))
                 {
                     return;
                 }
@@ -247,8 +247,10 @@ namespace Kayle
 
             AutoHeal();
             AutoUlt();
-            var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
+            var alvo = TargetSelector.GetTarget(W.Range, DamageType.Magical);
             if (!alvo.IsValid()) return;
+
+
 
             //-------------//
             //----Combo----//
@@ -283,7 +285,7 @@ namespace Kayle
             //-------------//
             //---Harass----//
             //-------------//
-            if ((Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.Harass) && _Player.ManaPercent >= HarassMenu["ManaH"].Cast<Slider>().CurrentValue)
+            if (( Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)  && _Player.ManaPercent >= HarassMenu["ManaH"].Cast<Slider>().CurrentValue))
             {
                 if (Q.IsReady() && Q.IsInRange(alvo) && HarassMenu["HarassQ"].Cast<CheckBox>().CurrentValue)
                 {
@@ -294,7 +296,7 @@ namespace Kayle
                 {
                     W.Cast(Player.Instance);
                 }
-                if (E.IsReady() && HarassMenu["HarassE"].Cast<CheckBox>().CurrentValue && _Player.Distance(alvo) <= _Player.GetAutoAttackRange() + 400)
+                if (E.IsReady() && HarassMenu["HarassE"].Cast<CheckBox>().CurrentValue && Q.IsInRange(alvo))
                 {
                     E.Cast();
                 }
@@ -305,22 +307,24 @@ namespace Kayle
             //-----Farm----//
             //-------------//
 
-            if ((Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.LaneClear) && _Player.ManaPercent >= HarassMenu["ManaF"].Cast<Slider>().CurrentValue)
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && _Player.ManaPercent >= HarassMenu["ManaF"].Cast<Slider>().CurrentValue))
             {
                 var minion =
               EntityManager.MinionsAndMonsters.GetLaneMinions()
                   .OrderByDescending(m => m.Health)
                   .FirstOrDefault(m => m.IsValidTarget(Q.Range));
+            
 
                 if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
                 {
                     if (minion == null) return;
+    
 
                     if (Q.IsReady() && minion.IsValidTarget(Q.Range))
                     {
                         Q.Cast(minion);
                     }
-                    if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && _Player.Distance(minion) <= _Player.GetAutoAttackRange() + 400)
+                    if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && Q.IsInRange(minion))
                     {
                         E.Cast();
                     }
