@@ -14,6 +14,7 @@ namespace Kayle
 {
     class KKayle
     {
+        public const string ChampionName = "Kayle";
        
         public static Menu Menu, DrawMenu, ComboMenu, HarassMenu, FarmMenu, HealMenu, UltMenu;
 
@@ -52,69 +53,78 @@ namespace Kayle
         // Game On Start
         static void Game_OnStart(EventArgs args)
         {
-            Chat.Print("KKayle Addon Loading Success");
-            Q = new Spell.Targeted(SpellSlot.Q, 650);
-            W = new Spell.Targeted(SpellSlot.W, 900);
-            E = new Spell.Active(SpellSlot.E);
-            R = new Spell.Targeted(SpellSlot.R, 900);
 
-            Menu = MainMenu.AddMenu("KKayle", "kayle");
-            Menu.AddSeparator();
-            Menu.AddLabel("Criado por Bruno105");
-            // Combo Menu
-            ComboMenu = Menu.AddSubMenu("Combo", "ComboKayle");
-            ComboMenu.Add("ComboW", new CheckBox("Use W on Combo", true));
+                if (ChampionName != PlayerInstance.BaseSkinName)
+                {
+                    return;
+                }
 
-            // Harass Menu
-            HarassMenu = Menu.AddSubMenu("Harass", "HarassKayle");
-            HarassMenu.Add("HarassQ", new CheckBox("Use Q on Harass", true));
-            HarassMenu.Add("HarassW", new CheckBox("Use W on Harass", false));
-            HarassMenu.Add("HarassE", new CheckBox("Use E on Harass", true));
-            HarassMenu.Add("ManaH", new Slider("No use Skill When Mana  <=", 30));
+                Bootstrap.Init(null);
 
-             //Farm Menu
-            FarmMenu = Menu.AddSubMenu("Farm", "FarmKayle");
-            FarmMenu.Add("FarmQ", new CheckBox("Use Q to Farm", true));
-            FarmMenu.Add("FarmE", new CheckBox("Usar E to Farm", true));
-            FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 30));
-            
-            // Heal Menu
-            var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
-            HealMenu = Menu.AddSubMenu("Heal", "HealKayle");
-            HealMenu.Add("autoW", new CheckBox("Usar W automatic", true));
-            HealMenu.Add("HealSelf", new Slider("Self W when % HP", 50));
-            HealMenu.Add("HealAlly", new Slider("Heal Ally when % HP", 50));
-            foreach (var a in allies)
-            {
-                HealMenu.Add("autoHeal_" + a.BaseSkinName, new CheckBox("Usar Heal nos champs " + a.BaseSkinName));
+                Chat.Print("KKayle Addon Loading Success");
+                Q = new Spell.Targeted(SpellSlot.Q, 650);
+                W = new Spell.Targeted(SpellSlot.W, 900);
+                E = new Spell.Active(SpellSlot.E);
+                R = new Spell.Targeted(SpellSlot.R, 900);
+
+                Menu = MainMenu.AddMenu("KKayle", "kayle");
+                Menu.AddSeparator();
+                Menu.AddLabel("Criado por Bruno105");
+                // Combo Menu
+                ComboMenu = Menu.AddSubMenu("Combo", "ComboKayle");
+                ComboMenu.Add("ComboW", new CheckBox("Use W on Combo", true));
+
+                // Harass Menu
+                HarassMenu = Menu.AddSubMenu("Harass", "HarassKayle");
+                HarassMenu.Add("HarassQ", new CheckBox("Use Q on Harass", true));
+                HarassMenu.Add("HarassW", new CheckBox("Use W on Harass", false));
+                HarassMenu.Add("HarassE", new CheckBox("Use E on Harass", true));
+                HarassMenu.Add("ManaH", new Slider("No use Skill When Mana  <=", 30));
+
+                //Farm Menu
+                FarmMenu = Menu.AddSubMenu("Farm", "FarmKayle");
+                FarmMenu.Add("FarmQ", new CheckBox("Use Q to Farm", true));
+                FarmMenu.Add("FarmE", new CheckBox("Usar E to Farm", true));
+                FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 30));
+
+                // Heal Menu
+                var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
+                HealMenu = Menu.AddSubMenu("Heal", "HealKayle");
+                HealMenu.Add("autoW", new CheckBox("Usar W automatic", true));
+                HealMenu.Add("HealSelf", new Slider("Self W when % HP", 50));
+                HealMenu.Add("HealAlly", new Slider("Heal Ally when % HP", 50));
+                foreach (var a in allies)
+                {
+                    HealMenu.Add("autoHeal_" + a.BaseSkinName, new CheckBox("Usar Heal nos champs " + a.BaseSkinName));
+                }
+
+                //--------------//
+                //---Ultmate---//
+                //------------//
+                UltMenu = Menu.AddSubMenu("Ultimate", "UltKayle");
+                UltMenu.Add("autoR", new CheckBox("Use Ultimate ", true));
+                UltMenu.Add("UltSelf", new Slider("Self Ultimate % HP", 20));
+                UltMenu.Add("UltAlly", new Slider("Ally Ultimate when  % HP", 20));
+                foreach (var a in allies)
+                {
+                    HealMenu.Add("autoUlt_" + a.BaseSkinName, new CheckBox("Use Ult on " + a.BaseSkinName));
+                }
+
+
+                //------------//
+                //-Draw Menu-//
+                //----------//
+                DrawMenu = Menu.AddSubMenu("Draws", "DrawKayle");
+                // DrawMenu.Add("drawDisable", new CheckBox("Desabilidatar todos os Draw", false));
+                DrawMenu.Add("drawAA", new CheckBox("Desable Draw do AA", true));
+                DrawMenu.Add("drawQ", new CheckBox("Desable Draw do Q", true));
+                DrawMenu.Add("drawW", new CheckBox("Desable Draw do W", true));
+                DrawMenu.Add("drawE", new CheckBox("Desabile Draw do E", true));
+
+
+
             }
-            
-            //--------------//
-            //---Ultmate---//
-            //------------//
-            UltMenu = Menu.AddSubMenu("Ultimate", "UltKayle");
-            UltMenu.Add("autoR", new CheckBox("Use Ultimate ", true));
-            UltMenu.Add("UltSelf", new Slider("Self Ultimate % HP", 20));
-            UltMenu.Add("UltAlly", new Slider("Ally Ultimate when  % HP", 20));
-            foreach (var a in allies)
-            {
-                HealMenu.Add("autoUlt_" + a.BaseSkinName, new CheckBox("Use Ult on " + a.BaseSkinName));
-            }
-
-
-            //------------//
-            //-Draw Menu-//
-            //----------//
-            DrawMenu = Menu.AddSubMenu("Draws", "DrawKayle");
-            // DrawMenu.Add("drawDisable", new CheckBox("Desabilidatar todos os Draw", false));
-            DrawMenu.Add("drawAA", new CheckBox("Desable Draw do AA", true));
-            DrawMenu.Add("drawQ", new CheckBox("Desable Draw do Q", true));
-            DrawMenu.Add("drawW", new CheckBox("Desable Draw do W", true));
-            DrawMenu.Add("drawE", new CheckBox("Desabile Draw do E", true));
-
-
-
-        }
+        
 
         // ------------//
         // Game OnDraw//
@@ -216,6 +226,7 @@ namespace Kayle
 
         public static void Game_OnUpdate(EventArgs args)
         {
+
             AutoHeal();
             AutoUlt();
             var alvo = TargetSelector.GetTarget(1000, DamageType.Mixed);
