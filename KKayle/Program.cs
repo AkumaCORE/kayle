@@ -53,7 +53,8 @@ namespace Kayle
         // Game On Start
         static void Game_OnStart(EventArgs args)
         {
-
+            try
+            {
                 if (ChampionName != PlayerInstance.BaseSkinName)
                 {
                     return;
@@ -120,8 +121,11 @@ namespace Kayle
                 DrawMenu.Add("drawQ", new CheckBox("Desable Draw do Q", true));
                 DrawMenu.Add("drawW", new CheckBox("Desable Draw do W", true));
                 DrawMenu.Add("drawE", new CheckBox("Desabile Draw do E", true));
-
-
+            }
+            catch (Exception e)
+            {
+                Chat.Print("KKayle: Exception occured while Initializing Addon. Error: " + e.Message);
+            }
 
             }
         
