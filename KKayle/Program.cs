@@ -22,6 +22,8 @@ namespace Kayle
         public static Spell.Targeted W;
         public static Spell.Active E;
         public static Spell.Targeted R;
+        private static Spell.Targeted Ignite;
+
 
         public static AIHeroClient PlayerInstance
         {
@@ -35,6 +37,10 @@ namespace Kayle
         public static AIHeroClient _Player
         {
             get { return ObjectManager.Player; }
+        }
+        private static bool Spell1(string s)
+        {
+            return Player.Spells.FirstOrDefault(o => o.SData.Name.Contains(s)) != null;
         }
 
 
@@ -67,6 +73,10 @@ namespace Kayle
                 W = new Spell.Targeted(SpellSlot.W, 900);
                 E = new Spell.Active(SpellSlot.E);
                 R = new Spell.Targeted(SpellSlot.R, 900);
+                if (Spell1("ignite"))   
+                {
+                    Ignite = new Spell.Targeted(ObjectManager.Player.GetSpellSlotFromName("summonerdot"), 600);
+                }
 
                 Menu = MainMenu.AddMenu("KKayle", "kayle");
                 Menu.AddSeparator();
@@ -74,6 +84,7 @@ namespace Kayle
                 // Combo Menu
                 ComboMenu = Menu.AddSubMenu("Combo", "ComboKayle");
                 ComboMenu.Add("ComboW", new CheckBox("Use W on Combo", true));
+                ComboMenu.Add("useIgnite", new CheckBox("Use Ignite", false));
 
                 // Harass Menu
                 HarassMenu = Menu.AddSubMenu("Harass", "HarassKayle");
@@ -252,6 +263,16 @@ namespace Kayle
                 if (E.IsReady() && _Player.Distance(alvo) <= _Player.GetAutoAttackRange() + 400)
                 {
                     E.Cast();
+                }
+                var Ignite1 = ComboMenu["useIgnite"].Cast<CheckBox>().CurrentValue;
+                if (Ignite1 && Ignite != null)
+                {
+                    var targetIgnite = EntityManager.Heroes.Enemies.FirstOrDefault(t => t.IsValidTarget() && Ignite.IsInRange(t));
+
+                    if (targetIgnite != null && targetIgnite.Health < PlayerInstance.GetSpellDamage(targetIgnite, Ignite.Slot))
+                    {
+                        Ignite.Cast(targetIgnite);
+                    }
                 }
 
             }
