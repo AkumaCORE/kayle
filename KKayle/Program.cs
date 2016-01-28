@@ -304,18 +304,20 @@ namespace Kayle
 
             if ((Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.LaneClear) && _Player.ManaPercent >= HarassMenu["ManaF"].Cast<Slider>().CurrentValue)
             {
+                var minion =
+              EntityManager.MinionsAndMonsters.GetLaneMinions()
+                  .OrderByDescending(m => m.Health)
+                  .FirstOrDefault(m => m.IsValidTarget(Q.Range));
+
                 if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
                 {
-                    var minion =
-                EntityManager.MinionsAndMonsters.GetLaneMinions()
-                    .OrderByDescending(m => m.Health)
-                    .FirstOrDefault(m => m.IsValidTarget(Q.Range));
+                  
 
                     if (Q.IsReady() && minion.IsValidTarget(Q.Range))
                     {
                         Q.Cast(minion);
                     }
-                    if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue)
+                    if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && _Player.Distance(minion) <= _Player.GetAutoAttackRange() + 400)
                     {
                         E.Cast();
                     }
