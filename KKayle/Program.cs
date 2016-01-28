@@ -52,7 +52,7 @@ namespace Kayle
         // Game On Start
         static void Game_OnStart(EventArgs args)
         {
-            Chat.Print("KKayle Addon");
+            Chat.Print("KKayle Addon Loading Success");
             Q = new Spell.Targeted(SpellSlot.Q, 650);
             W = new Spell.Targeted(SpellSlot.W, 900);
             E = new Spell.Active(SpellSlot.E);
