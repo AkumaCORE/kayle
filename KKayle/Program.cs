@@ -281,7 +281,7 @@ namespace Kayle
             //-----Farm----//
             //-------------//
 
-          /*  if ((Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.LaneClear) && _Player.ManaPercent >= HarassMenu["ManaF"].Cast<Slider>().CurrentValue)
+            if ((Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.LaneClear) && _Player.ManaPercent >= HarassMenu["ManaF"].Cast<Slider>().CurrentValue)
             {
                 if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
                 {
@@ -304,7 +304,7 @@ namespace Kayle
 
 
             }
-            */
+            
 
 
 
