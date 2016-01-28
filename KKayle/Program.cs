@@ -244,7 +244,7 @@ namespace Kayle
 
             AutoHeal();
             AutoUlt();
-            var alvo = TargetSelector.GetTarget(1000, DamageType.Mixed);
+            var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
             if (!alvo.IsValid()) return;
 
             //-------------//
