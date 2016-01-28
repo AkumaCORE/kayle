@@ -115,14 +115,14 @@ namespace Kayle
                 //---Ultmate---//
                 //------------//
 
-                var ally = EntityManager.Heroes.Allies.Where(b => !b.IsMe).OrderBy(b => b.BaseSkinName);
+                var ally = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
                 UltMenu = Menu.AddSubMenu("Ultimate", "UltKayle");
                 UltMenu.Add("autoR", new CheckBox("Use Ultimate ", true));
                 UltMenu.Add("UltSelf", new Slider("Self Ultimate % HP", 20));
                 UltMenu.Add("UltAlly", new Slider("Ally Ultimate when  % HP", 20));
-                foreach (var b in ally)
+                foreach (var a in ally)
                 {
-                    HealMenu.Add("autoUlt_" + b.BaseSkinName, new CheckBox("Use Ult on " + b.BaseSkinName));
+                    HealMenu.Add("autoUlt_" + a.BaseSkinName, new CheckBox("Use Ult on " + a.BaseSkinName));
                 }
 
 
@@ -211,7 +211,7 @@ namespace Kayle
                 return;
             }
 
-            var lowestHealthAllies = EntityManager.Heroes.Allies.Where(b => R.IsInRange(b) && !b.IsMe).OrderBy(b => b.Health).FirstOrDefault();
+            var lowestHealthAllies = EntityManager.Heroes.Allies.Where(a => R.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
 
             if (HealthPercent() <= HealMenu["UltSelf"].Cast<Slider>().CurrentValue)
             {
