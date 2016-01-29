@@ -97,7 +97,7 @@ namespace Kayle
                 FarmMenu = Menu.AddSubMenu("Farm", "FarmKayle");
                 FarmMenu.Add("FarmQ", new CheckBox("Use Q to Farm", true));
                 FarmMenu.Add("FarmE", new CheckBox("Usar E to Farm", true));
-                FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 30));
+                //FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 30));
 
                 // Heal Menu
                 var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
@@ -235,22 +235,6 @@ namespace Kayle
         }
     
 
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
         // ------------//
         // Game On Update//
         // ------------//
@@ -298,7 +282,7 @@ namespace Kayle
             //-------------//
             //---Harass----//
             //-------------//
-            if (( Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)  && (Player.Instance.ManaPercent > HarassMenu["ManaH"].Cast<Slider>().CurrentValue)))
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) )) //&&  (Player.Instance.ManaPercent > HarassMenu["ManaH"].Cast<Slider>().CurrentValue)
             {
                 if (Q.IsReady() && Q.IsInRange(alvo) && HarassMenu["HarassQ"].Cast<CheckBox>().CurrentValue)
                 {
@@ -320,9 +304,9 @@ namespace Kayle
             //-----Farm----//
             //-------------//
 
-            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && !(Player.Instance.ManaPercent < HarassMenu["ManaF"].Cast<Slider>().CurrentValue)))
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) ))  //&& !(Player.Instance.ManaPercent < HarassMenu["ManaF"].Cast<Slider>().CurrentValue)
             {
-                var minion =     EntityManager.MinionsAndMonsters.GetLaneMinions().OrderByDescending(m => m.Health).FirstOrDefault(m => m.IsValidTarget(Q.Range));
+                var minion = EntityManager.MinionsAndMonsters.GetLaneMinions().OrderByDescending(m => m.Health).FirstOrDefault(m => m.IsValidTarget(Q.Range));
             
 
                 if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
@@ -334,7 +318,7 @@ namespace Kayle
                     {
                         Q.Cast(minion);
                     }
-                    if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && Q.IsInRange(minion))
+                    if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && minion.IsValidTarget(Q.Range))
                     {
                         E.Cast();
                     }
