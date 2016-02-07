@@ -282,8 +282,12 @@ namespace Kayle
             //-------------//
             //---Harass----//
             //-------------//
-            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) )) //&&  (Player.Instance.ManaPercent > HarassMenu["ManaH"].Cast<Slider>().CurrentValue)
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))) 
             {
+                if (!(Player.Instance.ManaPercent > HarassMenu["ManaH"].Cast<Slider>().CurrentValue))
+                {
+                    return;
+                }
                 if (Q.IsReady() && Q.IsInRange(alvo) && HarassMenu["HarassQ"].Cast<CheckBox>().CurrentValue)
                 {
 
@@ -304,11 +308,9 @@ namespace Kayle
             //-----Farm----//
             //-------------//
 
-            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) ))  //&& !(Player.Instance.ManaPercent < HarassMenu["ManaF"].Cast<Slider>().CurrentValue)
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && !(Player.Instance.ManaPercent < HarassMenu["ManaF"].Cast<Slider>().CurrentValue)))
             {
-                var minion = EntityManager.MinionsAndMonsters.GetLaneMinions().OrderByDescending(m => m.Health).FirstOrDefault(m => m.IsValidTarget(Q.Range));
-            
-
+                var minion = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, _Player.Position, Q.Range).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
                 if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
                 {
                     if (minion == null) return;
