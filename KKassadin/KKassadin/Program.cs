@@ -69,7 +69,7 @@ namespace Kassadin
                 }
 
                 Bootstrap.Init(null);
-                Chat.Print("KKassadin Addon Loading Success");
+                Chat.Print("KKassadin Addon Loading Success", Color.Aqua);
                 Q = new Spell.Targeted(SpellSlot.Q, 650);
                 W = new Spell.Active(SpellSlot.W);
                 E = new Spell.Skillshot(SpellSlot.E, 700, SkillShotType.Cone, (int)0.5f, int.MaxValue, 10);
