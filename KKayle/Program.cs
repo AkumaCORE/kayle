@@ -308,7 +308,7 @@ namespace Kayle
             //-----Farm----//
             //-------------//
 
-            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && !(Player.Instance.ManaPercent < HarassMenu["ManaF"].Cast<Slider>().CurrentValue)))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) //&& !(Player.Instance.ManaPercent < HarassMenu["ManaF"].Cast<Slider>().CurrentValue))
             {
                 var minion = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, _Player.Position, Q.Range).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
                 if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
