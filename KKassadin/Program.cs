@@ -82,7 +82,7 @@ namespace Kassadin
                 Menu.AddLabel("Criado por Bruno105");
                 //------------//
                 //-Mode Menu-//
-                //----------//
+                //-----------//
                 ModesMenu = Menu.AddSubMenu("Modes", "ModesKassadin");
                 ModesMenu.AddSeparator();
                 ModesMenu.AddLabel("Combo Configs");
