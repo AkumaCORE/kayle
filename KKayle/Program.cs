@@ -54,9 +54,9 @@ namespace Kayle
         }
 
 
-        //---------//
-        // Start Game
-        // Game On Start
+        //-----------------//
+        // Start Game-----//
+        // Game On Start-//
         static void Game_OnStart(EventArgs args)
         {
             try
