@@ -97,7 +97,7 @@ namespace Kayle
                 FarmMenu = Menu.AddSubMenu("Farm", "FarmKayle");
                 FarmMenu.Add("FarmQ", new CheckBox("Use Q to Farm", true));
                 FarmMenu.Add("FarmE", new CheckBox("Usar E to Farm", true));
-                //FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 30));
+                FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 30));
 
                 // Heal Menu
                 var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
