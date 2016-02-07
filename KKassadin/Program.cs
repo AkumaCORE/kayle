@@ -108,7 +108,6 @@ namespace Kassadin
                 //-Draw Menu-//
                 //----------//
                 DrawMenu = Menu.AddSubMenu("Draws", "DrawKassadin");
-                //DrawMenu.Add("drawDisable", new CheckBox("Disable All drawn", false));
                 DrawMenu.Add("drawAA", new CheckBox("Draw do AA", true));
                 DrawMenu.Add("drawQ", new CheckBox(" Draw do Q", true));
                 DrawMenu.Add("drawW", new CheckBox(" Draw do W", true));
@@ -125,31 +124,23 @@ namespace Kassadin
 
         static void Game_OnDraw(EventArgs args)
         {
-             if (!DrawMenu["drawDisable"].Cast<CheckBox>().CurrentValue)
-             {
-                 return;
-             }
-             
-             if (DrawMenu["drawAA"].Cast<CheckBox>().CurrentValue)
-             {
-                 new Circle() { Color = Color.Aqua, Radius = _Player.GetAutoAttackRange(), BorderWidth = 2f }.Draw(_Player.Position);
-             }
-             if (DrawMenu["drawQ"].Cast<CheckBox>().CurrentValue)
-             {
-                 new Circle() { Color = Color.Aqua, Radius = 650, BorderWidth = 2f }.Draw(_Player.Position);
-             }
-             if (DrawMenu["drawW"].Cast<CheckBox>().CurrentValue)
-             {
-                 new Circle() { Color = Color.Aqua, Radius = _Player.GetAutoAttackRange() + 50, BorderWidth = 2f }.Draw(_Player.Position); ;
-             }
-             if (DrawMenu["drawE"].Cast<CheckBox>().CurrentValue)
-             {
-                 new Circle() { Color = Color.Aqua, Radius = 700, BorderWidth = 2f }.Draw(_Player.Position);
-             }
-             if (DrawMenu["drawR"].Cast<CheckBox>().CurrentValue)
-             {
-                 new Circle() { Color = Color.Aqua, Radius = 500, BorderWidth = 2f }.Draw(_Player.Position);
-             }
+
+            if (DrawMenu["drawAA"].Cast<CheckBox>().CurrentValue)
+            {
+                new Circle() { Color = Color.White, Radius = _Player.GetAutoAttackRange(), BorderWidth = 2f }.Draw(_Player.Position);
+            }
+            if (DrawMenu["drawQ"].Cast<CheckBox>().CurrentValue)
+            {
+                new Circle() { Color = Color.Aqua, Radius = 650, BorderWidth = 2f }.Draw(_Player.Position);
+            }
+            if (DrawMenu["drawW"].Cast<CheckBox>().CurrentValue)
+            {
+                new Circle() { Color = Color.Green, Radius = 900, BorderWidth = 2f }.Draw(_Player.Position);
+            }
+            if (DrawMenu["drawE"].Cast<CheckBox>().CurrentValue)
+            {
+                new Circle() { Color = Color.Red, Radius = _Player.GetAutoAttackRange() + 400, BorderWidth = 2f }.Draw(_Player.Position);
+            }
 
         }
 
