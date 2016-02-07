@@ -90,6 +90,7 @@ namespace Kassadin
                 ModesMenu.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu.Add("ComboE", new CheckBox("Use E on Combo", true));
                 ModesMenu.Add("ComboR", new CheckBox("Use R on Combo", true));
+                ModesMenu.Add("MaxR", new Slider("Don't use R if more than Champs on range :", 2, 1, 5));
                 ModesMenu.AddSeparator();
                 ModesMenu.AddLabel("Harass Configs");
                 ModesMenu.Add("ManaH", new Slider("Dont use Skills if Mana <=", 40));
@@ -158,6 +159,7 @@ namespace Kassadin
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
+                var rmax = EntityManager.Heroes.Enemies.Where(t => t.IsInRange(Player.Instance.Position, R.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
                 if (!alvo.IsValid()) return;
                 if (Q.IsReady() && Q.IsInRange(alvo) && ModesMenu["ComboQ"].Cast<CheckBox>().CurrentValue)
                 {
@@ -173,7 +175,7 @@ namespace Kassadin
                     E.Cast(alvo);
 
                 }
-                if (R.IsReady() && R.IsInRange(alvo) && ModesMenu["ComboE"].Cast<CheckBox>().CurrentValue)
+                if (R.IsReady() && R.IsInRange(alvo) && ModesMenu["ComboE"].Cast<CheckBox>().CurrentValue && !(rmax >= ModesMenu["MaxR"].Cast<Slider>().CurrentValue))
                 {
                     R.Cast(alvo);
 
