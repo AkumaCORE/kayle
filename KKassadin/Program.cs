@@ -125,7 +125,7 @@ namespace Kassadin
 
         static void Game_OnDraw(EventArgs args)
         {
-            /* if (!DrawMenu["drawDisable"].Cast<CheckBox>().CurrentValue)
+             if (!DrawMenu["drawDisable"].Cast<CheckBox>().CurrentValue)
              {
                  return;
              }
@@ -149,7 +149,7 @@ namespace Kassadin
              if (DrawMenu["drawR"].Cast<CheckBox>().CurrentValue)
              {
                  new Circle() { Color = Color.Aqua, Radius = 500, BorderWidth = 2f }.Draw(_Player.Position);
-             }*/
+             }
 
         }
 
