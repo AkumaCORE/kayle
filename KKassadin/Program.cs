@@ -103,7 +103,9 @@ namespace Kassadin
                 ModesMenu.Add("FarmQ", new CheckBox("Use Q on Farm", true));
                 ModesMenu.Add("FarmW", new CheckBox("Use W on Farm", true));
                 ModesMenu.Add("FarmE", new CheckBox("Use E on Farm", true));
+                ModesMenu.Add("MinionE", new Slider("Use E when count minions more than :",3,1,5));
                 ModesMenu.Add("FarmR", new CheckBox("Use R on Farm", true));
+
                 //------------//
                 //-Draw Menu-//
                 //----------//
@@ -112,6 +114,7 @@ namespace Kassadin
                 DrawMenu.Add("drawQ", new CheckBox(" Draw do Q", true));
                 DrawMenu.Add("drawW", new CheckBox(" Draw do W", true));
                 DrawMenu.Add("drawE", new CheckBox(" Draw do E", true));
+                DrawMenu.Add("drawR", new CheckBox(" Draw do R", true));
 
             }
 
@@ -135,11 +138,15 @@ namespace Kassadin
             }
             if (DrawMenu["drawW"].Cast<CheckBox>().CurrentValue)
             {
-                new Circle() { Color = Color.Green, Radius = 900, BorderWidth = 2f }.Draw(_Player.Position);
+                new Circle() { Color = Color.Green, Radius = (_Player.GetAutoAttackRange() + 50), BorderWidth = 2f }.Draw(_Player.Position);
             }
             if (DrawMenu["drawE"].Cast<CheckBox>().CurrentValue)
             {
-                new Circle() { Color = Color.Red, Radius = _Player.GetAutoAttackRange() + 400, BorderWidth = 2f }.Draw(_Player.Position);
+                new Circle() { Color = Color.Red, Radius = 600, BorderWidth = 2f }.Draw(_Player.Position);
+            }
+            if (DrawMenu["drawR"].Cast<CheckBox>().CurrentValue)
+            {
+                new Circle() { Color = Color.Blue, Radius = 500, BorderWidth = 2f }.Draw(_Player.Position);
             }
 
         }
@@ -210,7 +217,13 @@ namespace Kassadin
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
+
+                
+                
                 var minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, _Player.Position, Q.Range).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
+
+                var minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
+                
                 if ((_Player.ManaPercent <= ModesMenu["ManaF"].Cast<Slider>().CurrentValue))
                 {
                     return;
@@ -224,8 +237,9 @@ namespace Kassadin
                     W.Cast();
 
                 }
-                if (E.IsReady() && E.IsInRange(minions) && ModesMenu["FarmE"].Cast<CheckBox>().CurrentValue)
+                if (E.IsReady() && E.IsInRange(minions) && ModesMenu["FarmE"].Cast<CheckBox>().CurrentValue && (minion >= ModesMenu["MinionE"].Cast<Slider>().CurrentValue))
                 {
+
                     E.Cast(minions);
 
                 }

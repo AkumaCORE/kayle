@@ -316,7 +316,7 @@ namespace Kayle
                     if (minion == null) return;
     
 
-                    if (Q.IsReady() && minion.IsValidTarget(Q.Range))
+                    if (Q.IsReady())
                     {
                         Q.Cast(minion);
                     }
