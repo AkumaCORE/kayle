@@ -90,7 +90,7 @@ namespace Kassadin
                 ModesMenu.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu.Add("ComboE", new CheckBox("Use E on Combo", true));
                 ModesMenu.Add("ComboR", new CheckBox("Use R on Combo", true));
-                ModesMenu.Add("MaxR", new Slider("Don't use R if more than Champs on range :", 2, 1, 5));
+                ModesMenu.Add("MaxR", new Slider("Don't use R if more than Eminies on range :", 2, 1, 5));
                 ModesMenu.AddSeparator();
                 ModesMenu.AddLabel("Harass Configs");
                 ModesMenu.Add("ManaH", new Slider("Dont use Skills if Mana <=", 40));
