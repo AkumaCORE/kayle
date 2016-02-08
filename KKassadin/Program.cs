@@ -52,6 +52,8 @@ namespace Kassadin
             Loading.OnLoadingComplete += Game_OnStart;
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnUpdate;
+            Gapcloser.OnGapcloser += KGapCloser;
+            Interrupter.OnInterruptableSpell += KInterrupter;
         }
 
 
@@ -125,6 +127,33 @@ namespace Kassadin
             }
 
         }
+
+
+        static void KInterrupter(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
+        {
+
+            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < Q.Range && Q.IsReady())
+            {
+                Q.Cast(sender);
+            }
+
+        }
+
+
+        static void KGapCloser(Obj_AI_Base sender, Gapcloser.GapcloserEventArgs args)
+        {
+
+          
+            if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < E.Range && E.IsReady())
+            {
+                E.Cast(sender);
+            }
+        }
+
+
+
+        }
+
 
         static void Game_OnDraw(EventArgs args)
         {
@@ -251,6 +280,35 @@ namespace Kassadin
 
                 }
             }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+            {
+                var Mpos = Game.CursorPos;
+
+                if (R.IsReady())
+                {
+
+                    R.Cast(Mpos);
+
+
+                }
+
+
+
+
+
+
+
+
+            } 
+
+
+
+
+
+
+
+
         }
     }
 }
