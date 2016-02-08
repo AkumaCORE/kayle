@@ -11,13 +11,13 @@ using EloBuddy.SDK.Rendering;
 using Color = System.Drawing.Color;
 using SharpDX;
 
-namespace Kassadin
+namespace KKassadin
 {
-    class KKassadin
+    internal class Program
     {
         public const string ChampionName = "Kassadin";
 
-        public static Menu Menu, ModesMenu, DrawMenu, Misc;
+        public static Menu Menu, ModesMenu1, ModesMenu2, DrawMenu, Misc;
 
         public static Spell.Targeted Q;
         public static Spell.Active W;
@@ -85,29 +85,28 @@ namespace Kassadin
                 //------------//
                 //-Mode Menu-//
                 //-----------//
-                ModesMenu = Menu.AddSubMenu("Modes", "ModesKassadin");
-                ModesMenu.AddSeparator();
-                ModesMenu.AddLabel("Combo Configs");
-                ModesMenu.Add("ComboQ", new CheckBox("Use Q on Combo", true));
-                ModesMenu.Add("ComboW", new CheckBox("Use W on Combo", true));
-                ModesMenu.Add("ComboE", new CheckBox("Use E on Combo", true));
-                ModesMenu.Add("ComboR", new CheckBox("Use R on Combo", true));
-                ModesMenu.Add("MaxR", new Slider("Don't use R if more than Eminies on range :", 2, 1, 5));
-                ModesMenu.AddSeparator();
-                ModesMenu.AddLabel("Harass Configs");
-                ModesMenu.Add("ManaH", new Slider("Dont use Skills if Mana <=", 40));
-                ModesMenu.Add("HarassQ", new CheckBox("Use Q on Harass", true));
-                ModesMenu.Add("HarassW", new CheckBox("Use W on Harass", true));
-                ModesMenu.Add("HarassE", new CheckBox("Use E on Harass", true));
-                ModesMenu.Add("HarassR", new CheckBox("Use R on Harass", true));
-                ModesMenu.AddSeparator();
-                ModesMenu.AddLabel("Farm Configs");
-                ModesMenu.Add("ManaF", new Slider("Dont use Skills if Mana <=", 40));
-                ModesMenu.Add("FarmQ", new CheckBox("Use Q on Farm", true));
-                ModesMenu.Add("FarmW", new CheckBox("Use W on Farm", true));
-                ModesMenu.Add("FarmE", new CheckBox("Use E on Farm", true));
-                ModesMenu.Add("MinionE", new Slider("Use E when count minions more than :",3,1,5));
-                ModesMenu.Add("FarmR", new CheckBox("Use R on Farm", true));
+                ModesMenu1 = Menu.AddSubMenu("Combo/Harass", "Modes1Kassadin");
+                ModesMenu1.AddSeparator();
+                ModesMenu1.AddLabel("Combo Configs");
+                ModesMenu1.Add("ComboQ", new CheckBox("Use Q on Combo", true));
+                ModesMenu1.Add("ComboW", new CheckBox("Use W on Combo", true));
+                ModesMenu1.Add("ComboE", new CheckBox("Use E on Combo", true));
+                ModesMenu1.Add("ComboR", new CheckBox("Use R on Combo", true));
+                ModesMenu1.Add("MaxR", new Slider("Don't use R if more than Eminies on range :", 2, 1, 5));
+                ModesMenu1.AddSeparator();
+                ModesMenu1.AddLabel("Harass Configs");
+                ModesMenu1.Add("ManaH", new Slider("Dont use Skills if Mana <=", 40));
+                ModesMenu1.Add("HarassQ", new CheckBox("Use Q on Harass", true));
+                ModesMenu1.Add("HarassW", new CheckBox("Use W on Harass", true));
+                ModesMenu1.Add("HarassE", new CheckBox("Use E on Harass", true));
+                ModesMenu1.Add("HarassR", new CheckBox("Use R on Harass", true));
+                ModesMenu1 = Menu.AddSubMenu("ModesMenu2", "Modes2Kassadin");
+                ModesMenu2.AddLabel("Farm Configs");
+                ModesMenu2.Add("ManaL", new Slider("Dont use Skills if Mana <=", 40));
+                ModesMenu2.Add("LastQ", new CheckBox("Use Q on LastHit", true));
+                ModesMenu2.Add("LastW", new CheckBox("Use W on LastHit", true));
+                ModesMenu2.Add("LastE", new CheckBox("Use E on LastHit", true));
+                ModesMenu2.Add("MinionE", new Slider("Use E when count minions more than :", 3, 1, 5));
 
                 //------------//
                 //-Draw Menu-//
@@ -123,9 +122,9 @@ namespace Kassadin
                 //----------//
 
                 Misc = Menu.AddSubMenu("MiscMenu", "Misc");
-                Misc.Add("useQGapCloser", new CheckBox("Q on GapCloser",true));
-                Misc.Add("eInterrupt", new CheckBox("use E to Interrupt",true));
-                
+                Misc.Add("useQGapCloser", new CheckBox("Q on GapCloser", true));
+                Misc.Add("eInterrupt", new CheckBox("use E to Interrupt", true));
+
 
 
             }
@@ -141,7 +140,7 @@ namespace Kassadin
         static void KInterrupter(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
         {
 
-            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < Q.Range && Q.IsReady() && ModesMenu["useQGapCloser"].Cast<CheckBox>().CurrentValue)
+            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < Q.Range && Q.IsReady() && Misc["useQGapCloser"].Cast<CheckBox>().CurrentValue)
             {
                 Q.Cast(sender);
             }
@@ -153,7 +152,7 @@ namespace Kassadin
         {
 
 
-            if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < E.Range && E.IsReady() && ModesMenu["eInterrupt"].Cast<CheckBox>().CurrentValue)
+            if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < E.Range && E.IsReady() && Misc["eInterrupt"].Cast<CheckBox>().CurrentValue)
             {
                 E.Cast(sender);
             }
@@ -161,7 +160,7 @@ namespace Kassadin
 
 
 
-        
+
 
 
         static void Game_OnDraw(EventArgs args)
@@ -199,21 +198,21 @@ namespace Kassadin
                 var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
                 var rmax = EntityManager.Heroes.Enemies.Where(t => t.IsInRange(Player.Instance.Position, R.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
                 if (!alvo.IsValid()) return;
-                if (Q.IsReady() && Q.IsInRange(alvo) && ModesMenu["ComboQ"].Cast<CheckBox>().CurrentValue)
+                if (Q.IsReady() && Q.IsInRange(alvo) && ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue)
                 {
                     Q.Cast(alvo);
                 }
-                if (W.IsReady() && _Player.Distance(alvo) <= _Player.GetAutoAttackRange() + 50 && ModesMenu["ComboW"].Cast<CheckBox>().CurrentValue)
+                if (W.IsReady() && _Player.Distance(alvo) <= _Player.GetAutoAttackRange() + 50 && ModesMenu1["ComboW"].Cast<CheckBox>().CurrentValue)
                 {
                     W.Cast();
 
                 }
-                if (E.IsReady() && E.IsInRange(alvo) && ModesMenu["ComboE"].Cast<CheckBox>().CurrentValue)
+                if (E.IsReady() && E.IsInRange(alvo) && ModesMenu1["ComboE"].Cast<CheckBox>().CurrentValue)
                 {
                     E.Cast(alvo);
 
                 }
-                if (R.IsReady() && R.IsInRange(alvo) && ModesMenu["ComboE"].Cast<CheckBox>().CurrentValue && !(rmax >= ModesMenu["MaxR"].Cast<Slider>().CurrentValue))
+                if (R.IsReady() && R.IsInRange(alvo) && ModesMenu1["ComboE"].Cast<CheckBox>().CurrentValue && !(rmax >= ModesMenu1["MaxR"].Cast<Slider>().CurrentValue))
                 {
                     R.Cast(alvo);
 
@@ -228,25 +227,25 @@ namespace Kassadin
 
 
 
-                if ((_Player.ManaPercent <= ModesMenu["ManaH"].Cast<Slider>().CurrentValue))
+                if ((_Player.ManaPercent <= ModesMenu1["ManaH"].Cast<Slider>().CurrentValue))
                 {
                     return;
                 }
-                if (Q.IsReady() && Q.IsInRange(alvo) && ModesMenu["HarassQ"].Cast<CheckBox>().CurrentValue)
+                if (Q.IsReady() && Q.IsInRange(alvo) && ModesMenu1["HarassQ"].Cast<CheckBox>().CurrentValue)
                 {
                     Q.Cast(alvo);
                 }
-                if (W.IsReady() && _Player.Distance(alvo) <= _Player.GetAutoAttackRange() + 50 && ModesMenu["HarassW"].Cast<CheckBox>().CurrentValue)
+                if (W.IsReady() && _Player.Distance(alvo) <= _Player.GetAutoAttackRange() + 50 && ModesMenu1["HarassW"].Cast<CheckBox>().CurrentValue)
                 {
                     W.Cast();
 
                 }
-                if (E.IsReady() && E.IsInRange(alvo) && ModesMenu["HarassE"].Cast<CheckBox>().CurrentValue)
+                if (E.IsReady() && E.IsInRange(alvo) && ModesMenu1["HarassE"].Cast<CheckBox>().CurrentValue)
                 {
                     E.Cast(alvo);
 
                 }
-                if (R.IsReady() && R.IsInRange(alvo) && ModesMenu["HarassR"].Cast<CheckBox>().CurrentValue)
+                if (R.IsReady() && R.IsInRange(alvo) && ModesMenu1["HarassR"].Cast<CheckBox>().CurrentValue)
                 {
                     R.Cast(alvo);
 
@@ -258,46 +257,82 @@ namespace Kassadin
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
 
-                
-                
+
+
                 var minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, _Player.Position, Q.Range).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
 
                 var minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
-                
-                if ((_Player.ManaPercent <= ModesMenu["ManaF"].Cast<Slider>().CurrentValue))
+                if (minions == null) return;
+
+                if ((_Player.ManaPercent <= ModesMenu2["ManaF"].Cast<Slider>().CurrentValue))
                 {
                     return;
                 }
-                if (Q.IsReady() && Q.IsInRange(minions) && ModesMenu["FarmQ"].Cast<CheckBox>().CurrentValue)
+                if (Q.IsReady() && Q.IsInRange(minions) && ModesMenu2["FarmQ"].Cast<CheckBox>().CurrentValue && minions.Health < DamageLib.QCalc(minions))
                 {
                     Q.Cast(minions);
                 }
-                if (W.IsReady() && _Player.Distance(minions) <= _Player.GetAutoAttackRange() + 50 && ModesMenu["FarmW"].Cast<CheckBox>().CurrentValue)
+                if (W.IsReady() && _Player.Distance(minions) <= _Player.GetAutoAttackRange() + 50 && ModesMenu2["FarmW"].Cast<CheckBox>().CurrentValue)
                 {
                     W.Cast();
 
                 }
-                if (E.IsReady() && E.IsInRange(minions) && ModesMenu["FarmE"].Cast<CheckBox>().CurrentValue && (minion >= ModesMenu["MinionE"].Cast<Slider>().CurrentValue))
+                if (E.IsReady() && E.IsInRange(minions) && ModesMenu2["FarmE"].Cast<CheckBox>().CurrentValue && (minion >= ModesMenu2["MinionE"].Cast<Slider>().CurrentValue))
                 {
 
                     E.Cast(minions);
 
                 }
-                if (R.IsReady() && R.IsInRange(minions) && ModesMenu["FarmR"].Cast<CheckBox>().CurrentValue)
+                if (R.IsReady() && R.IsInRange(minions) && ModesMenu2["FarmR"].Cast<CheckBox>().CurrentValue)
                 {
                     R.Cast(minions);
 
                 }
             }
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
             {
-                var Mpos = Game.CursorPos;
+                var minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, _Player.Position, Q.Range).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
 
-                if (R.IsReady())
+                var minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
+                if (minions == null) return;
+                if (Q.IsReady() && Q.IsInRange(minions) && ModesMenu2["LastQ"].Cast<CheckBox>().CurrentValue && minions.Health < DamageLib.QCalc(minions))
+                {
+                    Q.Cast(minions);
+                }
+                if (W.IsReady() && _Player.Distance(minions) <= _Player.GetAutoAttackRange() + 50 && ModesMenu2["LastW"].Cast<CheckBox>().CurrentValue && minions.Health < DamageLib.WCalc(minions))
+                {
+                    W.Cast();
+
+                }
+                if (E.IsReady() && E.IsInRange(minions) && ModesMenu2["LastE"].Cast<CheckBox>().CurrentValue && (minion >= ModesMenu2["MinionE"].Cast<Slider>().CurrentValue && minions.Health < DamageLib.ECalc(minions)))
                 {
 
-                    R.Cast(Mpos);
+                    E.Cast(minions);
+
+
+
+
+
+                }
+
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+                {
+                    var Mpos = Game.CursorPos;
+
+                    if (R.IsReady())
+                    {
+
+                        R.Cast(Mpos);
+
+
+                    }
+
+
+
+
+
+
 
 
                 }
@@ -309,16 +344,10 @@ namespace Kassadin
 
 
 
-            } 
-
-
-
-
-
-
-
-
+            }
         }
+
     }
 }
+
 
