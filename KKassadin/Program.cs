@@ -17,7 +17,7 @@ namespace Kassadin
     {
         public const string ChampionName = "Kassadin";
 
-        public static Menu Menu, ModesMenu, DrawMenu;
+        public static Menu Menu, ModesMenu, DrawMenu, Misc;
 
         public static Spell.Targeted Q;
         public static Spell.Active W;
@@ -118,6 +118,15 @@ namespace Kassadin
                 DrawMenu.Add("drawW", new CheckBox(" Draw do W", true));
                 DrawMenu.Add("drawE", new CheckBox(" Draw do E", true));
                 DrawMenu.Add("drawR", new CheckBox(" Draw do R", true));
+                //------------//
+                //-Misc Menu-//
+                //----------//
+
+                Misc = Menu.AddSubMenu("MiscMenu", "Misc");
+                Misc.Add("useQGapCloser", new CheckBox("Q on GapCloser",true));
+                Misc.Add("eInterrupt", new CheckBox("use E to Interrupt",true));
+                
+
 
             }
 
@@ -132,7 +141,7 @@ namespace Kassadin
         static void KInterrupter(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
         {
 
-            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < Q.Range && Q.IsReady())
+            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < Q.Range && Q.IsReady() && ModesMenu["useQGapCloser"].Cast<CheckBox>().CurrentValue)
             {
                 Q.Cast(sender);
             }
@@ -143,8 +152,8 @@ namespace Kassadin
         static void KGapCloser(Obj_AI_Base sender, Gapcloser.GapcloserEventArgs args)
         {
 
-          
-            if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < E.Range && E.IsReady())
+
+            if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < E.Range && E.IsReady() && ModesMenu["eInterrupt"].Cast<CheckBox>().CurrentValue)
             {
                 E.Cast(sender);
             }
@@ -152,7 +161,7 @@ namespace Kassadin
 
 
 
-        }
+        
 
 
         static void Game_OnDraw(EventArgs args)
