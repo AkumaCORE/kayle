@@ -112,7 +112,7 @@ namespace KKassadin
                 ModesMenu2.Add("FarmW", new CheckBox("Use W on LaneClear", true));
                 ModesMenu2.Add("FarmE", new CheckBox("Use E on LaneClear", true));
                 ModesMenu2.Add("MinionE", new Slider("Use E when count minions more than :", 3, 1, 5));
-
+                ModesMenu2.Add("FarmR", new CheckBox("Use R on LaneClear", true));
                 //------------//
                 //-Draw Menu-//
                 //----------//
