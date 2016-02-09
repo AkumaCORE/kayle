@@ -100,7 +100,7 @@ namespace KKassadin
                 ModesMenu1.Add("HarassW", new CheckBox("Use W on Harass", true));
                 ModesMenu1.Add("HarassE", new CheckBox("Use E on Harass", true));
                 ModesMenu1.Add("HarassR", new CheckBox("Use R on Harass", true));
-                ModesMenu1 = Menu.AddSubMenu("ModesMenu2", "Modes2Kassadin");
+                ModesMenu2 = Menu.AddSubMenu("ModesMenu2", "Modes2Kassadin");
                 ModesMenu2.AddLabel("Farm Configs");
                 ModesMenu2.Add("ManaL", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("LastQ", new CheckBox("Use Q on LastHit", true));
