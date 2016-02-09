@@ -130,7 +130,7 @@ namespace KSejuani
                 //----------//
 
                 Misc = Menu.AddSubMenu("MiscMenu", "Misc");
-                Misc.Add("aarest", new CheckBox("Reset AA with w", true));
+                Misc.Add("aarest", new CheckBox("Reset AA with w"));
                 //Misc.Add("useQGapCloser", new CheckBox("Q on GapCloser", true));
                 Misc.Add("eInterrupt", new CheckBox("use E to Interrupt", true));
 
