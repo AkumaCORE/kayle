@@ -101,15 +101,16 @@ namespace KKassadin
                 ModesMenu1.Add("HarassE", new CheckBox("Use E on Harass", true));
                 ModesMenu1.Add("HarassR", new CheckBox("Use R on Harass", true));
                 ModesMenu2 = Menu.AddSubMenu("Lane/LastHit", "Modes2Kassadin");
-                ModesMenu2.AddLabel("Farm Configs");
+                ModesMenu2.AddLabel("LastHit Configs");
                 ModesMenu2.Add("ManaL", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("LastQ", new CheckBox("Use Q on LastHit", true));
                 ModesMenu2.Add("LastW", new CheckBox("Use W on LastHit", true));
                 ModesMenu2.Add("LastE", new CheckBox("Use E on LastHit", true));
+                ModesMenu2.AddLabel("Lane Cler Config");
                 ModesMenu2.Add("ManaF", new Slider("Dont use Skills if Mana <=", 40));
-                ModesMenu2.Add("FarmQ", new CheckBox("Use Q on LastHit", true));
-                ModesMenu2.Add("FarmW", new CheckBox("Use W on LastHit", true));
-                ModesMenu2.Add("FarmE", new CheckBox("Use E on LastHit", true));
+                ModesMenu2.Add("FarmQ", new CheckBox("Use Q on LaneClear", true));
+                ModesMenu2.Add("FarmW", new CheckBox("Use W on LaneClear", true));
+                ModesMenu2.Add("FarmE", new CheckBox("Use E on LaneClear", true));
                 ModesMenu2.Add("MinionE", new Slider("Use E when count minions more than :", 3, 1, 5));
 
                 //------------//
@@ -266,7 +267,7 @@ namespace KKassadin
                 var minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, _Player.Position, Q.Range).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
 
                 var minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
-                if (minions == null) return;
+       
 
                 if ((_Player.ManaPercent <= ModesMenu2["ManaF"].Cast<Slider>().CurrentValue))
                 {
@@ -299,7 +300,7 @@ namespace KKassadin
                 var minions = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, _Player.Position, Q.Range).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
 
                 var minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
-                if (minions == null) return;
+       
                 if (Q.IsReady() && Q.IsInRange(minions) && ModesMenu2["LastQ"].Cast<CheckBox>().CurrentValue && minions.Health < DamageLib.QCalc(minions))
                 {
                     Q.Cast(minions);
