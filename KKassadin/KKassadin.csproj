@@ -7,8 +7,8 @@
     <ProjectGuid>{637F7146-5CDA-4CC1-BD38-27CDAF607016}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Teste</RootNamespace>
-    <AssemblyName>Teste</AssemblyName>
+    <RootNamespace>KKassadin</RootNamespace>
+    <AssemblyName>KKassadin</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
