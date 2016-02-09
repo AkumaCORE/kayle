@@ -100,12 +100,16 @@ namespace KKassadin
                 ModesMenu1.Add("HarassW", new CheckBox("Use W on Harass", true));
                 ModesMenu1.Add("HarassE", new CheckBox("Use E on Harass", true));
                 ModesMenu1.Add("HarassR", new CheckBox("Use R on Harass", true));
-                ModesMenu2 = Menu.AddSubMenu("ModesMenu2", "Modes2Kassadin");
+                ModesMenu2 = Menu.AddSubMenu("Lane/LastHit", "Modes2Kassadin");
                 ModesMenu2.AddLabel("Farm Configs");
                 ModesMenu2.Add("ManaL", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("LastQ", new CheckBox("Use Q on LastHit", true));
                 ModesMenu2.Add("LastW", new CheckBox("Use W on LastHit", true));
                 ModesMenu2.Add("LastE", new CheckBox("Use E on LastHit", true));
+                ModesMenu2.Add("ManaF", new Slider("Dont use Skills if Mana <=", 40));
+                ModesMenu2.Add("FarmQ", new CheckBox("Use Q on LastHit", true));
+                ModesMenu2.Add("FarmW", new CheckBox("Use W on LastHit", true));
+                ModesMenu2.Add("FarmE", new CheckBox("Use E on LastHit", true));
                 ModesMenu2.Add("MinionE", new Slider("Use E when count minions more than :", 3, 1, 5));
 
                 //------------//
