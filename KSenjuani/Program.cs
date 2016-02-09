@@ -55,6 +55,7 @@ namespace KSejuani
             Loading.OnLoadingComplete += Game_OnStart;
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Game_OnDraw;
+            Orbwalker.OnPostAttack += Reset;
             Interrupter.OnInterruptableSpell += KInterrupter;
         }
 
@@ -129,6 +130,7 @@ namespace KSejuani
                 //----------//
 
                 Misc = Menu.AddSubMenu("MiscMenu", "Misc");
+                Misc.Add("aarest", new CheckBox("Reset AA with w", true));
                 //Misc.Add("useQGapCloser", new CheckBox("Q on GapCloser", true));
                 Misc.Add("eInterrupt", new CheckBox("use E to Interrupt", true));
 
@@ -184,7 +186,7 @@ namespace KSejuani
         static void Game_OnUpdate(EventArgs args)
         {
 
-            
+
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 ModesManager.Combo();
@@ -194,11 +196,11 @@ namespace KSejuani
                 ModesManager.Harass();
             }
 
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) )
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
 
                 ModesManager.LaneClear();
-           
+
             }
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
             {
@@ -214,9 +216,21 @@ namespace KSejuani
 
             }
 
+        }
 
-
-
+          private static void Reset(AttackableUnit target, EventArgs args)
+        {
+            if (!Misc["aareset"].Cast<CheckBox>().CurrentValue) return;
+                if (target != null && target.IsEnemy && !target.IsInvulnerable && !target.IsDead && target is AIHeroClient &&target.Distance(ObjectManager.Player) <= W.Range)
+                if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) &&  (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit)))) return;
+                var e = target as Obj_AI_Base;
+                if (!ModesMenu1["ComboW"].Cast<CheckBox>().CurrentValue || !e.IsEnemy) return;
+                if (target == null) return;
+                if (e.IsValidTarget() && W.IsReady())
+                {
+                    W.Cast();
+                }
+        
 
 
 
