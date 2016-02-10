@@ -23,14 +23,15 @@ namespace KGragas
             var W = Program.W;
             var E = Program.E;
             var R = Program.R;
-            var alvo = TargetSelector.GetTarget(Program.Q.Range, DamageType.Magical);
-            var Rminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(Program.R.Range) && (DamageLib.RCalc(m) > m.Health));      
-            var predPos = Prediction.Position.PredictLinearMissile(alvo, Program.R.Range, Program.R.Width, Program.R.CastDelay, Program.R.Speed, int.MaxValue, null, false);
+            var alvo = TargetSelector.GetTarget(R.Range, DamageType.Magical);
+            var predPosQ = Prediction.Position.PredictLinearMissile(alvo, Q.Range, Q.Width, Q.CastDelay, Q.Speed, int.MaxValue, null, false);
+            var predPos = Prediction.Position.PredictLinearMissile(alvo, R.Range, R.Width, R.CastDelay, R.Speed, int.MaxValue, null, false);
+            var predPosE = Prediction.Position.PredictLinearMissile(alvo, E.Radius, E.Width, E.CastDelay, E.Speed, 0, null, true);
             if (!alvo.IsValid()) return;
 
             if (Q.IsReady() && alvo.IsValidTarget(Q.Range) && Program.ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue)
             {
-                Q.Cast(Q.GetPrediction(alvo).CastPosition);
+                Q.Cast(predPosQ.CastPosition);
                 QLogic.CastedQ = true;
             }
 
@@ -45,9 +46,14 @@ namespace KGragas
 
 
             }
-            if (R.IsReady() && alvo.IsValidTarget(R.Range) && Program.ModesMenu1["ComboR"].Cast<CheckBox>().CurrentValue && !(Q.IsInRange(alvo)))
+            if (R.IsReady() && alvo.IsValidTarget(R.Range) && Program.ModesMenu1["ComboR"].Cast<CheckBox>().CurrentValue )//&& !(Q.IsInRange(alvo)))
             {
                 R.Cast(predPos.CastPosition + 100);
+
+            }
+            if (E.IsReady() && alvo.IsValidTarget(R.Range) && !(Q.IsInRange(alvo)))
+            {
+                E.Cast(predPosE.CastPosition);
 
             }
 
@@ -61,7 +67,7 @@ namespace KGragas
             var W = Program.W;
             var E = Program.E;
             var R = Program.R;
-            var alvo = TargetSelector.GetTarget(Program.Q.Range, DamageType.Magical);
+            var alvo = TargetSelector.GetTarget(Program.R.Range, DamageType.Magical);
             var predPos = Prediction.Position.PredictLinearMissile(alvo, Program.R.Range, Program.R.Width, Program.R.CastDelay, Program.R.Speed, int.MaxValue, null, false);
             if (!alvo.IsValid()) return;
             if ((Program._Player.ManaPercent <= Program.ModesMenu1["ManaH"].Cast<Slider>().CurrentValue))
@@ -182,6 +188,10 @@ namespace KGragas
                 }
             }
 
+
+
+
+       
 
 
 

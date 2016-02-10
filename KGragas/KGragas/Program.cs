@@ -48,7 +48,6 @@ namespace KGragas
             Loading.OnLoadingComplete += Game_OnStart;
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Game_OnDraw;
-           // Game.OnTick += Game_OnTick;
             GameObject.OnCreate += Game_ObjectCreate;
             //GameObject.OnDelete += Game_OnDelete;
             //Orbwalker.OnPostAttack += Reset;
@@ -70,25 +69,25 @@ namespace KGragas
 
                 Bootstrap.Init(null);
                 Chat.Print("KGragas Addon Loading Success", Color.Green);
-                
 
 
 
-                Q = new Spell.Skillshot(SpellSlot.Q,775,SkillShotType.Circular,1,1000,110);
+
+                Q = new Spell.Skillshot(SpellSlot.Q, 775, SkillShotType.Circular, 1, 1000, 110);
                 Q.AllowedCollisionCount = int.MaxValue;
                 W = new Spell.Active(SpellSlot.W);
-                E = new Spell.Skillshot(SpellSlot.E, 675, SkillShotType.Linear, 0, 1000, 50);               
+                E = new Spell.Skillshot(SpellSlot.E, 675, SkillShotType.Linear, 0, 1000, 50);
                 R = new Spell.Skillshot(SpellSlot.R, 1100, SkillShotType.Circular, 1, 1000, 700);
                 R.AllowedCollisionCount = int.MaxValue;
 
 
-            
+
 
                 Menu = MainMenu.AddMenu("KGragas", "gragas");
                 Menu.AddSeparator();
                 Menu.AddLabel("Criado por Bruno105");
 
-                
+
                 //------------//
                 //-Mode Menu-//
                 //-----------//
@@ -101,7 +100,7 @@ namespace KGragas
                 ModesMenu1.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu1.Add("ComboE", new CheckBox("Use E on Combo", true));
                 ModesMenu1.Add("ComboR", new CheckBox("Use R on Combo", true));
-               // ModesMenu1.Add("MinR", new Slider("Use R if min Champs on R range:", 2, 1, 5));
+                // ModesMenu1.Add("MinR", new Slider("Use R if min Champs on R range:", 2, 1, 5));
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Harass Configs");
                 ModesMenu1.Add("ManaH", new Slider("Dont use Skills if Mana <=", 40));
@@ -131,29 +130,21 @@ namespace KGragas
                 //------------//
                 //-Misc Menu-//
                 //----------//
-
+                var Enemies = EntityManager.Heroes.Enemies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
                 Misc = Menu.AddSubMenu("MiscMenu", "Misc");
                 //Misc.Add("aarest", new CheckBox("Reset AA with w"));
                 Misc.Add("useEGapCloser", new CheckBox("E on GapCloser", true));
                 Misc.Add("useEInterrupter", new CheckBox("use E to Interrupt", true));
-                //Misc.Add("Key", new KeyBind("Insec Key (Make sure that this key is unique)", false, KeyBind.BindTypes.HoldActive, (uint)'R'));
 
-            
-            
             }
 
             catch (Exception e)
             {
                 Chat.Print("KGragas: Exception occured while Initializing Addon. Error: " + e.Message);
+
             }
-    
+
         }
-       /* public static bool GetKeyBindValue(this Menu m, string s)
-        {
-            if (m != null)
-                return m[s].Cast<KeyBind>().CurrentValue;
-            return false;
-        }*/
         static void Game_OnDraw(EventArgs args)
         {
 
@@ -213,36 +204,16 @@ namespace KGragas
 
         }
 
-
-      /*  private static void Game_OnTick(EventArgs args)
-        {
-            try
-            {
-            
-                if (QLogic.ShouldBeExecuted())
-                {
-                    QLogic.Execute();
-                }
-            }
-             
-                catch (Exception e)
-                {
-                    // Please enable the debug window to see and solve the exceptions that might occur!
-                    Chat.Print("KGragas: Exception occured Addon. Error: " + e.Message);
-                }
-
-        }
-        */
         public static bool CastedQ;
-       private static void Game_ObjectCreate(GameObject sender, EventArgs args)
+        private static void Game_ObjectCreate(GameObject sender, EventArgs args)
         {
-            
-            
+
+
             if (sender.Name.Contains("Gragas_Base_Q_Ally.Troy"))
             {
                 CastedQ = false;
                 Chat.Print(CastedQ);
-            } 
+            }
 
 
         }
@@ -267,6 +238,18 @@ namespace KGragas
                 E.Cast(sender);
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

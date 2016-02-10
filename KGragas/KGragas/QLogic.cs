@@ -30,16 +30,7 @@ namespace KGragas
         }
     }
 
-    public class QLogic
-    {
 
-       
-
-
-
-
-
-    }
 
 
 
