@@ -10,9 +10,9 @@ using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
 using Color = System.Drawing.Color;
 
-namespace Kayle
+namespace KKayle
 {
-    class KKayle
+    internal class Program
     {
         public const string ChampionName = "Kayle";
        
@@ -29,7 +29,7 @@ namespace Kayle
         {
             get { return Player.Instance; }
         }
-        private static float HealthPercent()
+        public static float HealthPercent()
         {
             return (PlayerInstance.Health / PlayerInstance.MaxHealth) * 100;
         }
@@ -50,6 +50,7 @@ namespace Kayle
             Loading.OnLoadingComplete += Game_OnStart;
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnUpdate;
+            Game.OnTick += Game_OnTick;
 
         }
 
@@ -59,6 +60,7 @@ namespace Kayle
         // Game On Start-//
         static void Game_OnStart(EventArgs args)
         {
+            
             try
             {
                 if (ChampionName != PlayerInstance.BaseSkinName)
@@ -95,9 +97,15 @@ namespace Kayle
 
                 //Farm Menu
                 FarmMenu = Menu.AddSubMenu("Farm", "FarmKayle");
+                FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 40));
                 FarmMenu.Add("FarmQ", new CheckBox("Use Q to Farm", true));
                 FarmMenu.Add("FarmE", new CheckBox("Usar E to Farm", true));
-                FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 40));
+                FarmMenu.Add("MinionE", new Slider("Only use E to Lane clear if minions on lane >=", 3, 1, 5));
+                FarmMenu.AddSeparator();
+                FarmMenu.AddLabel("Last Hit");
+                FarmMenu.Add("LastQ", new CheckBox("Use Q to Last Hit", true));
+
+               
 
                 // Heal Menu
                 var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
@@ -174,65 +182,12 @@ namespace Kayle
         //-----//
        // Heal //
       // -----//
-        private static void AutoHeal()
-        {
-            if (!W.IsReady())
-            {
-                return;
-            }
-
-            var lowestHealthAlly = EntityManager.Heroes.Allies.Where(a => W.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
-
-            if (HealthPercent() <= HealMenu["HealSelf"].Cast<Slider>().CurrentValue)
-            {
-                W.Cast(PlayerInstance);
-            }
-
-            else if (lowestHealthAlly != null)
-            {
-                if (!(lowestHealthAlly.Health <= HealMenu["HealAlly"].Cast<Slider>().CurrentValue))
-                {
-                    return;
-                }
-                if (HealMenu["autoHeal_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
-                {
-                    W.Cast(lowestHealthAlly);
-                }
-            }
-        }
+       
 
         //-------------//
         //--Ultimate--//
         //-----------//
-        private static void AutoUlt()
-        {
-                     
-            if (!R.IsReady() || Player.Instance.IsRecalling())
-            {
-                return;
-            }
-
-            var lowestHealthAllies = EntityManager.Heroes.Allies.Where(a => R.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
-
-            if (Player.Instance.HealthPercent <= UltMenu["UltSelf"].Cast<Slider>().CurrentValue)
-            {
-                R.Cast(Player.Instance);
-            }
-
-            if (lowestHealthAllies == null)
-            {
-                return;
-            }
-
-            if (!(lowestHealthAllies.Health <= UltMenu["UltAlly"].Cast<Slider>().CurrentValue))
-            {
-                return;
-            }
-            if (UltMenu["autoUlt_" + lowestHealthAllies.BaseSkinName].Cast<CheckBox>().CurrentValue)
-            {
-                R.Cast(lowestHealthAllies);
-            }
-        }
+        
     
 
         // ------------//
@@ -242,99 +197,51 @@ namespace Kayle
         public static void Game_OnUpdate(EventArgs args)
         {
 
-            AutoHeal();
-            AutoUlt();
-            var alvo = TargetSelector.GetTarget(W.Range, DamageType.Magical);
-            if (!alvo.IsValid()) return;
-
-
-
-            //-------------//
-            //----Combo----//
-            //-------------//
-            if (Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.Combo)
-            {
-                if (Q.IsReady() && Q.IsInRange(alvo))
-                {
-                    Q.Cast(alvo);
-                }
-                if (W.IsReady() && W.IsInRange(alvo))
-                {
-                    W.Cast(Player.Instance);
-                }
-                if (E.IsReady() && _Player.Distance(alvo) <= _Player.GetAutoAttackRange() + 400)
-                {
-                    E.Cast();
-                }
-                var Ignite1 = ComboMenu["useIgnite"].Cast<CheckBox>().CurrentValue;
-                if (Ignite1 && Ignite != null)
-                {
-                    var targetIgnite = EntityManager.Heroes.Enemies.FirstOrDefault(t => t.IsValidTarget() && Ignite.IsInRange(t));
-
-                    if (targetIgnite != null && targetIgnite.Health < PlayerInstance.GetSpellDamage(targetIgnite, Ignite.Slot))
-                    {
-                        Ignite.Cast(targetIgnite);
-                    }
-                }
-
-            }
-
-            //-------------//
-            //---Harass----//
-            //-------------//
-            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))) 
-            {
-                if (!(Player.Instance.ManaPercent > HarassMenu["ManaH"].Cast<Slider>().CurrentValue))
-                {
-                    return;
-                }
-                if (Q.IsReady() && Q.IsInRange(alvo) && HarassMenu["HarassQ"].Cast<CheckBox>().CurrentValue)
-                {
-
-                    Q.Cast(alvo);
-                }
-                if (W.IsReady() && !HarassMenu["HarassW"].Cast<CheckBox>().CurrentValue)
-                {
-                    W.Cast(Player.Instance);
-                }
-                if (E.IsReady() && HarassMenu["HarassE"].Cast<CheckBox>().CurrentValue && Q.IsInRange(alvo))
-                {
-                    E.Cast();
-                }
-
-            }
-
-            //-------------//
-            //-----Farm----//
-            //-------------//
-
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)) //&& !(Player.Instance.ManaPercent < HarassMenu["ManaF"].Cast<Slider>().CurrentValue))
-            {
-                var minion = EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, _Player.Position, Q.Range).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
-                if (Q.IsReady() && FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue )
-                {
-                    if (minion == null) return;
-    
-
-                    if (Q.IsReady())
-                    {
-                        Q.Cast(minion);
-                    }
-                    if (E.IsReady() && FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && minion.IsValidTarget(Q.Range))
-                    {
-                        E.Cast();
-                    }
-
-                }
-
-
-
-            }
             
 
+            //-------------//
+            //----Modes----//
+            //-------------//
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+               ModeManager.Combo();
+            }
+
+            if ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))) 
+            {
+               ModeManager.Harass();
+
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+            {
+                ModeManager.LaneClear();
+
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+            {
+                ModeManager.JungleClear();
+
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
+            {
+                ModeManager.JungleClear();
+
+            }
+
+
+            }
+
+
+        public static void Game_OnTick(EventArgs args)
+        {
+            ModeManager.AutoHeal();
+            ModeManager.AutoUlt();
 
 
         }
 
+        }
+
     }
-}
+
