@@ -134,7 +134,10 @@ namespace KGragas
                 Misc = Menu.AddSubMenu("MiscMenu", "Misc");
                 //Misc.Add("aarest", new CheckBox("Reset AA with w"));
                 Misc.Add("useEGapCloser", new CheckBox("E on GapCloser", true));
+                Misc.Add("useEGapCloser", new CheckBox("R on GapCloser", true));
                 Misc.Add("useEInterrupter", new CheckBox("use E to Interrupt", true));
+
+                Misc.Add("useRInterrupter", new CheckBox("use R to Interrupt", true));
 
             }
 
@@ -227,6 +230,10 @@ namespace KGragas
             {
                 E.Cast(sender);
             }
+            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < R.Range && R.IsReady() && Misc["useRInterrupter"].Cast<CheckBox>().CurrentValue)
+            {
+                R.Cast(sender);
+            }
 
         }
         static void KGapCloser(Obj_AI_Base sender, Gapcloser.GapcloserEventArgs args)
@@ -236,6 +243,10 @@ namespace KGragas
             if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < E.Range && E.IsReady() && Misc["useEGapCloser"].Cast<CheckBox>().CurrentValue)
             {
                 E.Cast(sender);
+            }
+            if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < R.Range && R.IsReady() && Misc["useRGapCloser"].Cast<CheckBox>().CurrentValue)
+            {
+                R.Cast(sender);
             }
         }
 
