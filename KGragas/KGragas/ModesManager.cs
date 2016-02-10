@@ -121,7 +121,7 @@ namespace KGragas
                 W.Cast();
 
             }
-            if (E.IsReady() && Program.E.IsInRange(minions)) //&& Program.ModesMenu1["FarmE"].Cast<CheckBox>().CurrentValue)
+            if (E.IsReady() && Program.E.IsInRange(minions) && Program.ModesMenu2["FarmE"].Cast<CheckBox>().CurrentValue)
             {
                 E.Cast(minions);
 
