@@ -225,7 +225,7 @@ namespace KKayle
             }
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
             {
-                ModeManager.JungleClear();
+                ModeManager.LastHit();
 
             }
 
