@@ -10,28 +10,28 @@ namespace KKassadin
         public static float QCalc(Obj_AI_Base target)
         {
             return _Player.CalculateDamageOnUnit(target, DamageType.Magical,
-                (float)(new[] { 0, 70, 95, 120, 145, 170 }[Program.Q.Level] + 0.7 * _Player.FlatMagicDamageMod
+                (float)(new[] { 0, 70, 95, 120, 145, 170 }[Program.Q.Level] + 0.7f * _Player.FlatMagicDamageMod
                     ));
         }
 
         public static float WCalc(Obj_AI_Base target)
         {
             return _Player.CalculateDamageOnUnit(target, DamageType.Magical,
-                (float)(new[] { 0, 20, 45, 70, 95, 120 }[Program.W.Level] + 0.6 * _Player.FlatMagicDamageMod
+                (float)(new[] { 0, 20, 45, 70, 95, 120 }[Program.W.Level] + 0.6f * _Player.FlatMagicDamageMod
                     ));
         }
 
         public static float ECalc(Obj_AI_Base target)
         {
             return _Player.CalculateDamageOnUnit(target, DamageType.Magical,
-                (float)(new[] { 0, 80, 105, 130, 155, 180 }[Program.E.Level] + 0.7 * _Player.FlatMagicDamageMod
+                (float)(new[] { 0, 80, 105, 130, 155, 180 }[Program.E.Level] + 0.7f * _Player.FlatMagicDamageMod
                     ));
         }
 
         public static float RCalc(Obj_AI_Base target)
         {
             return _Player.CalculateDamageOnUnit(target, DamageType.Magical,
-                (float)(new[] { 0, 80, 100, 120 }[Program.R.Level] + 0.2 * _Player.MaxMana + 0.1 * _Player.FlatMagicDamageMod
+                (float)(new[] { 0, 80, 100, 120 }[Program.R.Level] + 0.2f * _Player.MaxMana + 0.1f * _Player.FlatMagicDamageMod
                     ));
         }
         public static float DmgCalc(AIHeroClient target)
