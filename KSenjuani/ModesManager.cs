@@ -122,13 +122,13 @@ namespace KSejuani
             {
                 Program.Q.Cast(qminions);
             }
-            if (Program.W.IsReady() && Program.W.IsInRange(wminions) && Program.ModesMenu2["LastW"].Cast<CheckBox>().CurrentValue && wminions.Health < DamageLib.WCalc(wminions) && (minion >= Program.ModesMenu2["MinionW"].Cast<Slider>().CurrentValue))
+            if (Program.W.IsReady() && Program.W.IsInRange(wminions) && Program.ModesMenu2["LastW"].Cast<CheckBox>().CurrentValue && wminions.Health < DamageLib.WCalc(wminions))
             {
-                Program.W.Cast(wminions);
+                Program.W.Cast();
             }
-            if (Program.W.IsReady() && Program.E.IsInRange(wminions) && Program.ModesMenu2["LastE"].Cast<CheckBox>().CurrentValue && eminions.Health < DamageLib.ECalc(wminions) && (minion >= Program.ModesMenu2["MinionW"].Cast<Slider>().CurrentValue))
+            if (Program.E.IsReady() && Program.E.IsInRange(eminions) && Program.ModesMenu2["LastE"].Cast<CheckBox>().CurrentValue && eminions.Health < DamageLib.ECalc(eminions) && (minion >= Program.ModesMenu2["MinionE"].Cast<Slider>().CurrentValue) && eminions.HasBuff("SejuaniFrost"))
             {
-                Program.W.Cast(wminions);
+                Program.E.Cast();
             }
 
 
