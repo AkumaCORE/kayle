@@ -38,7 +38,7 @@ namespace KGragas
         public static Spell.Skillshot E;
         public static Spell.Skillshot R;
         public static Spell.Targeted Ignite;
-
+        public static bool CastedQ;
 
 
 
@@ -51,6 +51,7 @@ namespace KGragas
             GameObject.OnCreate += Game_ObjectCreate;
             //GameObject.OnDelete += Game_OnDelete;
             //Orbwalker.OnPostAttack += Reset;
+            Game.OnTick += Game_OnTick;
             Interrupter.OnInterruptableSpell += KInterrupter;
             Gapcloser.OnGapcloser += KGapCloser;
         }
@@ -92,14 +93,19 @@ namespace KGragas
                 //-Mode Menu-//
                 //-----------//
 
-
-                ModesMenu1 = Menu.AddSubMenu("Combo/Harass", "Modes1Gragas");
+                var Enemies = EntityManager.Heroes.Enemies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
+                ModesMenu1 = Menu.AddSubMenu("Combo/Harass/KS", "Modes1Gragas");
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Combo Configs");
                 ModesMenu1.Add("ComboQ", new CheckBox("Use Q on Combo", true));
                 ModesMenu1.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu1.Add("ComboE", new CheckBox("Use E on Combo", true));
                 ModesMenu1.Add("ComboR", new CheckBox("Use R on Combo", true));
+                ModesMenu1.AddLabel("Use R only on:");
+                foreach (var a in Enemies)
+                {
+                    ModesMenu1.Add("Ult_" + a.BaseSkinName, new CheckBox(a.BaseSkinName));
+                }
                 // ModesMenu1.Add("MinR", new Slider("Use R if min Champs on R range:", 2, 1, 5));
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Harass Configs");
@@ -107,18 +113,32 @@ namespace KGragas
                 ModesMenu1.Add("HarassQ", new CheckBox("Use Q on Harass", true));
                 ModesMenu1.Add("HarassW", new CheckBox("Use W on Harass", true));
                 ModesMenu1.Add("HarassE", new CheckBox("Use E on Harass", true));
-                ModesMenu2 = Menu.AddSubMenu("Lane/LastHit", "Modes2Gragas");
+                ModesMenu1.AddSeparator();
+                ModesMenu1.AddLabel("Kill Steal Configs");
+                ModesMenu1.Add("KQ", new CheckBox("Use Q on KillSteal", true));
+                ModesMenu1.Add("KE", new CheckBox("Use E to KillSteal", true));
+                ModesMenu1.Add("KR", new CheckBox("Use R to KillSteal", true));
+
+                ModesMenu2 = Menu.AddSubMenu("Lane/Jungle/Last", "Modes2Gragas");
                 ModesMenu2.AddLabel("LastHit Configs");
                 ModesMenu2.Add("ManaL", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("LastQ", new CheckBox("Use Q on LastHit", true));
                 ModesMenu2.Add("LastW", new CheckBox("Use W on LastHit", true));
                 ModesMenu2.Add("LastE", new CheckBox("Use E on LastHit", true));
-                ModesMenu2.AddLabel("Lane/Jungle Clear Config");
+                ModesMenu2.AddLabel("Lane Clear Config");
                 ModesMenu2.Add("ManaF", new Slider("Dont use Skills if Mana <=", 40));
-                ModesMenu2.Add("FarmQ", new CheckBox("Use Q on LaneClear/Jungle", true));
-                ModesMenu2.Add("FarmW", new CheckBox("Use W on LaneClear/Jungle", true));
-                ModesMenu2.Add("FarmE", new CheckBox("Use E on LaneClear/Jungle", true));
+                ModesMenu2.Add("FarmQ", new CheckBox("Use Q on LaneClear", true));
+                ModesMenu2.Add("FarmW", new CheckBox("Use W on LaneClear", true));
+                ModesMenu2.Add("FarmE", new CheckBox("Use E on LaneClear", true));
                 ModesMenu2.Add("MinionQ", new Slider("Use Q when count minions more than :", 3, 1, 5));
+                ModesMenu2.AddLabel("Jungle Clear Config");
+                ModesMenu2.Add("ManaJ", new Slider("Dont use Skills if Mana <=", 40));
+                ModesMenu2.Add("JungQ", new CheckBox("Use Q on ungle", true));
+                ModesMenu2.Add("JungW", new CheckBox("Use W on Jungle", true));
+                ModesMenu2.Add("JungE", new CheckBox("Use E on Jungle", true));
+                
+
+
                 //------------//
                 //-Draw Menu-//
                 //----------//
@@ -130,13 +150,12 @@ namespace KGragas
                 //------------//
                 //-Misc Menu-//
                 //----------//
-                var Enemies = EntityManager.Heroes.Enemies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
+                //var Enemies = EntityManager.Heroes.Enemies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
                 Misc = Menu.AddSubMenu("MiscMenu", "Misc");
                 //Misc.Add("aarest", new CheckBox("Reset AA with w"));
                 Misc.Add("useEGapCloser", new CheckBox("E on GapCloser", true));
                 Misc.Add("useEGapCloser", new CheckBox("R on GapCloser", true));
                 Misc.Add("useEInterrupter", new CheckBox("use E to Interrupt", true));
-
                 Misc.Add("useRInterrupter", new CheckBox("use R to Interrupt", true));
 
             }
@@ -207,22 +226,33 @@ namespace KGragas
 
         }
 
-        public static bool CastedQ;
-        private static void Game_ObjectCreate(GameObject sender, EventArgs args)
-        {
+        static void Game_OnTick(EventArgs args){
 
-
-            if (sender.Name.Contains("Gragas_Base_Q_Ally.Troy"))
-            {
-                CastedQ = false;
-                Chat.Print(CastedQ);
-            }
-
+           ModesManager.KillSteal();
 
         }
 
 
 
+        private static void Game_ObjectCreate(GameObject sender, EventArgs args)
+        {
+            if (sender.Name == ("Gragas_Base_Q_Ally.Troy"))
+            {
+                if (Player.Instance.Spellbook.GetSpell(SpellSlot.Q).ToggleState == 2 || Player.Instance.Spellbook.GetSpell(SpellSlot.Q).ToggleState == 1)
+                {
+                    Program.Q.Cast(Player.Instance);
+                    CastedQ = false;
+                }
+                else
+                {
+                    CastedQ = false;
+                }
+
+
+            }
+
+
+        }
         static void KInterrupter(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
         {
 

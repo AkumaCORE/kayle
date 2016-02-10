@@ -32,7 +32,7 @@ namespace KGragas
             if (Q.IsReady() && alvo.IsValidTarget(Q.Range) && Program.ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue)
             {
                 Q.Cast(predPosQ.CastPosition);
-                QLogic.CastedQ = true;
+                Program.CastedQ = true;
             }
 
             if (W.IsReady() && alvo.IsValidTarget(E.Range) && Program.ModesMenu1["ComboW"].Cast<CheckBox>().CurrentValue)
@@ -46,7 +46,7 @@ namespace KGragas
 
 
             }
-            if (R.IsReady() && alvo.IsValidTarget(R.Range) && Program.ModesMenu1["ComboR"].Cast<CheckBox>().CurrentValue )//&& !(Q.IsInRange(alvo)))
+            if (R.IsReady() && alvo.IsValidTarget(R.Range) && Program.ModesMenu1["ComboR"].Cast<CheckBox>().CurrentValue && Program.ModesMenu1["Ult_" + alvo.BaseSkinName].Cast<CheckBox>().CurrentValue)//&& !(Q.IsInRange(alvo)))
             {
                 R.Cast(predPos.CastPosition + 100);
 
@@ -100,20 +100,20 @@ namespace KGragas
             var E = Program.E;
             var R = Program.R;
             var minions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(Q.Range));
-            var minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
+            var minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, Q.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
             if (minions == null) return;
             if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaF"].Cast<Slider>().CurrentValue))
             {
                 return;
             }
-            
+
             if (Q.IsReady() && Program.Q.IsInRange(minions) && Program.ModesMenu2["FarmQ"].Cast<CheckBox>().CurrentValue && (minion >= Program.ModesMenu2["MinionQ"].Cast<Slider>().CurrentValue))
             {
-               
-                    Q.Cast(Q.GetPrediction(minions).CastPosition);
 
-                    Program.CastedQ = true;
-                
+                Q.Cast(Q.GetPrediction(minions).CastPosition);
+
+                Program.CastedQ = true;
+
             }
 
             if (W.IsReady() && E.IsInRange(minions) && Program.ModesMenu2["FarmW"].Cast<CheckBox>().CurrentValue)
@@ -165,23 +165,23 @@ namespace KGragas
                 var jungleMonsters = EntityManager.MinionsAndMonsters.GetJungleMonsters().OrderByDescending(j => j.Health).FirstOrDefault(j => j.IsValidTarget(Program.Q.Range));
                 var minioon = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, Program.E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
                 if (jungleMonsters == null) return;
-                if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaF"].Cast<Slider>().CurrentValue))
+                if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaJ"].Cast<Slider>().CurrentValue))
                 {
                     return;
                 }
-                if (Q.IsReady() && Q.IsInRange(jungleMonsters) && Program.ModesMenu2["FarmQ"].Cast<CheckBox>().CurrentValue)
+                if (Q.IsReady() && Q.IsInRange(jungleMonsters) && Program.ModesMenu2["JungQ"].Cast<CheckBox>().CurrentValue)
                   
                         Q.Cast(Q.GetPrediction(jungleMonsters).CastPosition);
 
                         Program.CastedQ = true;
                     
 
-                if (W.IsReady() && E.IsInRange(jungleMonsters) )//&&  Program.ModesMenu2["FarmW"].Cast<CheckBox>().CurrentValue)
+                if (W.IsReady() && E.IsInRange(jungleMonsters)  &&  Program.ModesMenu2["JungW"].Cast<CheckBox>().CurrentValue)
                 {
                     W.Cast();
 
                 }
-                if (E.IsReady() && E.IsInRange(jungleMonsters)) //&& Program.ModesMenu1["FarmE"].Cast<CheckBox>().CurrentValue)
+                if (E.IsReady() && E.IsInRange(jungleMonsters) && Program.ModesMenu1["JungE"].Cast<CheckBox>().CurrentValue)
                 {
                     E.Cast(jungleMonsters);
 
@@ -190,7 +190,37 @@ namespace KGragas
 
 
 
+            public static void KillSteal()
+            {
+                var Q = Program.Q;
+                var W = Program.W;
+                var E = Program.E;
+                var R = Program.R;
 
+
+                foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && !a.IsZombie && a.Health > 0))
+                {
+                    if (enemy.IsValidTarget(R.Range) && enemy.HealthPercent <= 40)
+                    {
+
+                        if (DamageLib.ECalc(enemy) + DamageLib.ECalc(enemy) + DamageLib.RCalc(enemy) >= enemy.Health)
+                        {
+                            if (Program.ModesMenu1["KQ"].Cast<CheckBox>().CurrentValue && (DamageLib.ECalc(enemy) >= enemy.Health) && Q.IsInRange(enemy) && Q.IsReady())
+                            {
+                                Q.Cast(Q.GetPrediction(enemy).CastPosition);
+
+                                Program.CastedQ = true;
+                            }
+                            if (Program.ModesMenu1["KE"].Cast<CheckBox>().CurrentValue && (DamageLib.ECalc(enemy) >= enemy.Health) && E.IsInRange(enemy) && E.IsReady())
+                            { R.Cast(enemy); }
+                            if (Program.ModesMenu1["KR"].Cast<CheckBox>().CurrentValue && (DamageLib.RCalc(enemy) >= enemy.Health) && R.IsInRange(enemy) && R.IsReady())
+                            { R.Cast(enemy); }
+                        }
+
+                    }
+                }
+
+            }
        
 
 
