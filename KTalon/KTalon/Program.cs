@@ -39,6 +39,13 @@ namespace KTalon
         //public static Item tiamat, hydra, blade, yoummu, botrk;
         //public static Vector3 CursorPos = (Game.CursorPos);
         public static Slider ComboMode;
+        public static bool CastedR ;
+        public static readonly Item Youmuu = new Item((int)ItemId.Youmuus_Ghostblade);
+        public static readonly Item Tiamat = new Item((int)ItemId.Tiamat);
+        public static readonly Item Hydra = new Item((int)ItemId.Titanic_Hydra);
+        public static readonly Item botrk = new Item((int)ItemId.Blade_of_the_Ruined_King);
+        public static readonly Item alfange = new Item((int)ItemId.Bilgewater_Cutlass);
+
 
         static void Main(string[] args)
         {
@@ -47,6 +54,7 @@ namespace KTalon
             Game.OnUpdate += Game_OnUpdate;
             Gapcloser.OnGapcloser += KGapCloser;
             Orbwalker.OnPostAttack += Reset;
+            
         }
 
         public static void Game_OnStart(EventArgs args)
@@ -67,7 +75,7 @@ namespace KTalon
                 R = new Spell.Active(SpellSlot.R);
 
 
-
+               
 
 
                 Menu = MainMenu.AddMenu("KTalon", "talon");
@@ -88,21 +96,14 @@ namespace KTalon
                 ModesMenu1.Add("ComboQ", new CheckBox("Use Q on Combo", true));
                 ModesMenu1.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu1.Add("ComboE", new CheckBox("Use E on Combo", true));
-                //ModesMenu1.Add("ActiveE", new CheckBox("Use E only Killable target", false));
                 ModesMenu1.Add("ComboR", new CheckBox("Use R on Combo", true));
                 ModesMenu1.Add("useI", new CheckBox("Use itens on Combo", true));
-                /*ModesMenu1.AddLabel("Use R only on:");
-                foreach (var a in Enemies)
-                {
-                    ModesMenu1.Add("Ult_" + a.BaseSkinName, new CheckBox(a.BaseSkinName));
-                }*/
-                // ModesMenu1.Add("MinR", new Slider("Use R if min Champs on R range:", 2, 1, 5));
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Harass Configs");
                 ModesMenu1.Add("ManaH", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu1.Add("HarassQ", new CheckBox("Use Q on Harass", true));
                 ModesMenu1.Add("HarassW", new CheckBox("Use W on Harass", true));
-                ModesMenu1.Add("HarassE", new CheckBox("Use W on Harass", false));
+                ModesMenu1.Add("HarassE", new CheckBox("Use E on Harass", false));
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Kill Steal Configs");
                 ModesMenu1.Add("KQ", new CheckBox("Use Q on KillSteal", true));
@@ -115,23 +116,16 @@ namespace KTalon
                 ModesMenu2.Add("ManaL", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("LastQ", new CheckBox("Use Q on LastHit", true));
                 ModesMenu2.Add("LastW", new CheckBox("Use W on LastHit", true));
-                //ModesMenu2.Add("LastE", new CheckBox("Use E on LastHit", true));
                 ModesMenu2.AddLabel("Lane Clear Config");
                 ModesMenu2.Add("ManaF", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("FarmQ", new CheckBox("Use Q on LaneClear", true));
                 ModesMenu2.Add("FarmW", new CheckBox("Use W on LaneClear", true));
-                //ModesMenu2.Add("FarmE", new CheckBox("Use E on LaneClear", true));
                 ModesMenu2.Add("MinionW", new Slider("Use W when count minions more than :", 3, 1, 5));
                 ModesMenu2.AddLabel("Jungle Clear Config");
                 ModesMenu2.Add("ManaJ", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("JungQ", new CheckBox("Use Q on ungle", true));
                 ModesMenu2.Add("JungW", new CheckBox("Use W on Jungle", true));
-                // ModesMenu2.Add("JungE", new CheckBox("Use E on Jungle", true));
-                Misc = Menu.AddSubMenu("MiscMenu", "Misc");
-                Misc.Add("aarest", new CheckBox("Reset AA with w"));
-                Misc.Add("useEGapCloser", new CheckBox("E on GapCloser", true));
-                // Misc.Add("eInterrupt", new CheckBox("use E to Interrupt", true));
-
+               
 
                 //------------//
                 //-Draw Menu-//
@@ -177,6 +171,7 @@ namespace KTalon
             {
                 new Circle() { Color = Color.Blue, Radius = 650, BorderWidth = 2f }.Draw(_Player.Position);
             }
+            new Circle() { Color = Color.Blue, Radius = 1100, BorderWidth = 2f }.Draw(_Player.Position);
 
         }
         public static void Game_OnUpdate(EventArgs args)
@@ -184,7 +179,13 @@ namespace KTalon
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
+                if (Program.ModesMenu1["useI"].Cast<CheckBox>().CurrentValue)
+                {
+                    Itens.UseItens();
+                }
+              
                 ModesManager.Combo();
+              
 
             }
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
@@ -215,9 +216,9 @@ namespace KTalon
 
             }
 
+           
 
-
-
+            
 
 
 

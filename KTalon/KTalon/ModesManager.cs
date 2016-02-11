@@ -12,13 +12,14 @@ namespace KTalon
 {
     internal class ModesManager
     {
+
+
         public static void Combo()
         {
             var Q = Program.Q;
             var W = Program.W;
             var E = Program.E;
             var R = Program.R;
-            var Rrange = 600;
             var ComboMode = Program.ComboMode;
             var alvo = TargetSelector.GetTarget(W.Range, DamageType.Physical);
             //var predPosW = Prediction.Position.PredictLinearMissile(alvo, W.Range, W.Width, W.CastDelay, W.Speed, int.MaxValue, null, false);
@@ -60,11 +61,16 @@ namespace KTalon
             /////Caso 2
             if (ComboMode.CurrentValue == 2)
             {
-                if (useR && R.IsReady() && R.IsInRange(alvo))
+                var Rtarget = TargetSelector.GetTarget(1100, DamageType.Physical);
+                var CastedR = Program.CastedR;
+                
+                if (!Rtarget.IsValid()) return;
+                if (R.IsReady() && !(Program._Player.HasBuff("TalonDisappear")) && (Program._Player.Distance(alvo) <= E.Range + 300))
                 {
                     R.Cast();
+                    
                 }
-                if (useE && E.IsReady() && E.IsInRange(alvo))
+                if (useE && E.IsReady() && E.IsInRange(alvo) && (Q.IsReady() || E.IsReady()))
                 {
                     E.Cast(alvo);
                 }
@@ -81,7 +87,7 @@ namespace KTalon
             //Caso 3
             if (ComboMode.CurrentValue == 3)
             {
-                if (useE && E.IsReady() && E.IsInRange(alvo))
+                if (useE && E.IsReady() && E.IsInRange(alvo) && (Q.IsReady() || E.IsReady()))
                 {
                     E.Cast(alvo);
                 }
@@ -111,17 +117,17 @@ namespace KTalon
             var useW = Program.ModesMenu1["HarassW"].Cast<CheckBox>().CurrentValue;
             var useE = Program.ModesMenu1["HarassE"].Cast<CheckBox>().CurrentValue;
             var alvo = TargetSelector.GetTarget(W.Range, DamageType.Physical);
-            var predPosW = Prediction.Position.PredictLinearMissile(alvo, W.Range, W.Width, W.CastDelay, W.Speed, int.MaxValue, null, false);            
+            var predPosW = Prediction.Position.PredictLinearMissile(alvo, W.Range, W.Width, W.CastDelay, W.Speed, int.MaxValue, null, false);
             if (!alvo.IsValid()) return;
             if ((Program._Player.ManaPercent <= Program.ModesMenu1["ManaH"].Cast<Slider>().CurrentValue))
             {
                 return;
             }
-            if (!(useE) && W.IsReady() && E.IsInRange(alvo))
+            if ((useE) && W.IsReady() && E.IsInRange(alvo))
             {
                 E.Cast(alvo);
             }
-            
+
             if (useQ && Q.IsReady() && Program._Player.Distance(alvo) <= Program._Player.GetAutoAttackRange() + 30)
             {
                 Q.Cast();
@@ -130,30 +136,30 @@ namespace KTalon
             {
                 W.Cast(alvo);
             }
-           
+
         }
         public static void LaneClear()
         {
             var Q = Program.Q;
             var W = Program.W;
             var useQ = Program.ModesMenu2["FarmQ"].Cast<CheckBox>().CurrentValue;
-            var useW = Program.ModesMenu2["FarmW"].Cast<CheckBox>().CurrentValue;            
+            var useW = Program.ModesMenu2["FarmW"].Cast<CheckBox>().CurrentValue;
             var minions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(W.Range));
             var minion = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, W.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
             if (minions == null) return;
             if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaF"].Cast<Slider>().CurrentValue))
             {
-               return;
+                return;
             }
             if (useQ && Q.IsReady() && W.IsInRange(minions))
             {
-               Q.Cast();
+                Q.Cast();
             }
             if (useW && W.IsReady() && W.IsInRange(minions) && (minion >= Program.ModesMenu2["Minionw"].Cast<Slider>().CurrentValue))
-           {
+            {
                 W.Cast(minions);
             }
-           
+
 
         }
         public static void JungleClear()
@@ -180,7 +186,7 @@ namespace KTalon
         }
         public static void LastHit()
         {
-            
+
             var Q = Program.Q;
             var W = Program.W;
             var useQ = Program.ModesMenu2["LastQ"].Cast<CheckBox>().CurrentValue;
@@ -199,7 +205,7 @@ namespace KTalon
 
                 W.Cast(wminions);
 
-            if (Q.IsReady() && (Program._Player.Distance(qminions) <= Program._Player.GetAutoAttackRange()) && useQ  && qminions.Health < DamageLib.QCalc(qminions))
+            if (Q.IsReady() && (Program._Player.Distance(qminions) <= Program._Player.GetAutoAttackRange()) && useQ && qminions.Health < DamageLib.QCalc(qminions))
             {
                 Q.Cast();
             }
@@ -213,49 +219,45 @@ namespace KTalon
             var E = Program.E;
             var R = Program.R;
 
-             foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && !a.IsZombie && a.Health > 0))
+            foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && !a.IsZombie && a.Health > 0))
+            {
+                if (enemy.IsValidTarget(R.Range) && enemy.HealthPercent <= 40)
                 {
-                    if (enemy.IsValidTarget(R.Range) && enemy.HealthPercent <= 40)
+
+                    if (DamageLib.QCalc(enemy) + DamageLib.WCalc(enemy) + DamageLib.RCalc(enemy) >= enemy.Health)
                     {
-
-                        if (DamageLib.QCalc(enemy) + DamageLib.WCalc(enemy) + DamageLib.RCalc(enemy) >= enemy.Health)
+                        if (E.IsReady() && E.IsInRange(enemy) && Program.ModesMenu1["KE"].Cast<CheckBox>().CurrentValue)
                         {
-                            if (E.IsReady() && E.IsInRange(enemy) && Program.ModesMenu1["KE"].Cast<CheckBox>().CurrentValue)
-                            {
-                                E.Cast(enemy);
+                            E.Cast(enemy);
 
-                            
-                            }
-                            if (Program.ModesMenu1["KW"].Cast<CheckBox>().CurrentValue && (DamageLib.WCalc(enemy) >= enemy.Health) && W.IsInRange(enemy) && W.IsReady())
-                            {
-                                W.Cast(enemy);
 
-                            
-                            }
-                            if (Program.ModesMenu1["KQ"].Cast<CheckBox>().CurrentValue && (DamageLib.QCalc(enemy) >= enemy.Health) && E.IsInRange(enemy) && Q.IsReady())
-                            { Q.Cast(enemy); }
-                            if (Program.ModesMenu1["KR"].Cast<CheckBox>().CurrentValue && (DamageLib.RCalc(enemy) >= enemy.Health) && R.IsInRange(enemy) && R.IsReady())
-                            { R.Cast(); }
                         }
+                        if (Program.ModesMenu1["KW"].Cast<CheckBox>().CurrentValue && (DamageLib.WCalc(enemy) >= enemy.Health) && W.IsInRange(enemy) && W.IsReady())
+                        {
+                            W.Cast(enemy);
 
+
+                        }
+                        if (Program.ModesMenu1["KQ"].Cast<CheckBox>().CurrentValue && (DamageLib.QCalc(enemy) >= enemy.Health) && E.IsInRange(enemy) && Q.IsReady())
+                        { Q.Cast(enemy); }
+                        if (Program.ModesMenu1["KR"].Cast<CheckBox>().CurrentValue && (DamageLib.RCalc(enemy) >= enemy.Health) && R.IsInRange(enemy) && R.IsReady())
+                        { R.Cast(); }
                     }
+
                 }
-
             }
-       
-
-
-
-
-
-
-
 
         }
 
 
 
 
+
+
+
+
+
+    }
 
 
     }
