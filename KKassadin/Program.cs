@@ -54,6 +54,7 @@ namespace KKassadin
             Game.OnUpdate += Game_OnUpdate;
             Gapcloser.OnGapcloser += KGapCloser;
             Interrupter.OnInterruptableSpell += KInterrupter;
+            Orbwalker.OnPostAttack += Reset;
         }
 
 
@@ -127,6 +128,7 @@ namespace KKassadin
                 //----------//
 
                 Misc = Menu.AddSubMenu("MiscMenu", "Misc");
+                Misc.Add("aarest", new CheckBox("Reset AA with w"));
                 Misc.Add("useQGapCloser", new CheckBox("Q on GapCloser", true));
                 Misc.Add("eInterrupt", new CheckBox("use E to Interrupt", true));
 
@@ -145,7 +147,7 @@ namespace KKassadin
         static void KInterrupter(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
         {
 
-            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < Q.Range && Q.IsReady() && Misc["useQGapCloser"].Cast<CheckBox>().CurrentValue)
+            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < Q.Range && Q.IsReady() && Misc["eInterrupt"].Cast<CheckBox>().CurrentValue)
             {
                 Q.Cast(sender);
             }
@@ -157,7 +159,7 @@ namespace KKassadin
         {
 
 
-            if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < E.Range && E.IsReady() && Misc["eInterrupt"].Cast<CheckBox>().CurrentValue)
+            if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < E.Range && E.IsReady() && Misc["useQGapCloser"].Cast<CheckBox>().CurrentValue)
             {
                 E.Cast(sender);
             }
@@ -353,6 +355,23 @@ namespace KKassadin
             }
         }
 
+        private static void Reset(AttackableUnit target, EventArgs args)
+        {
+            if (!Misc["aareset"].Cast<CheckBox>().CurrentValue) return;
+            if (target != null && target.IsEnemy && !target.IsInvulnerable && !target.IsDead && target is AIHeroClient && target.Distance(ObjectManager.Player) <= W.Range)
+                if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit)))) return;
+            var e = target as Obj_AI_Base;
+            if (!ModesMenu1["ComboW"].Cast<CheckBox>().CurrentValue || !e.IsEnemy) return;
+            if (target == null) return;
+            if (e.IsValidTarget() && W.IsReady())
+            {
+                W.Cast();
+            }
+
+
+
+
+        }
     }
 }
 
