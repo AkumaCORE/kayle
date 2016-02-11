@@ -226,15 +226,15 @@ namespace KTalon
 
             if (E.IsReady())
             {
-                var EscapeTarget = EntityManager.MinionsAndMonsters.CombinedAttackable.FirstOrDefault(it => it.IsValidTarget(E.Range) && it.Distance(Game.CursorPos) <= 300 && !(Program._Player.HasBuff("TalonDisappear")));
+                var FleeAlvo = EntityManager.MinionsAndMonsters.CombinedAttackable.FirstOrDefault(it => it.IsValidTarget(E.Range) && it.Distance(Game.CursorPos) <= 300 && !(Program._Player.HasBuff("TalonDisappear")));
 
-                if (EscapeTarget != null) E.Cast(EscapeTarget);
+                if (FleeAlvo != null) E.Cast(FleeAlvo);
 
                 else
                 {
-                    EscapeTarget = EntityManager.MinionsAndMonsters.CombinedAttackable.FirstOrDefault(it => it.IsValidTarget(E.Range) && it.Distance(Game.CursorPos) <= 300 && !(Program._Player.HasBuff("TalonDisappear")));
+                    FleeAlvo = EntityManager.MinionsAndMonsters.CombinedAttackable.FirstOrDefault(it => it.IsValidTarget(E.Range) && it.Distance(Game.CursorPos) <= 300 && !(Program._Player.HasBuff("TalonDisappear")));
 
-                    if (EscapeTarget != null) E.Cast(EscapeTarget);
+                    if (FleeAlvo != null) E.Cast(FleeAlvo);
                 }
             }
         }
