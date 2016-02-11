@@ -45,6 +45,8 @@ namespace KTalon
             Loading.OnLoadingComplete += Game_OnStart;
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnUpdate;
+            Gapcloser.OnGapcloser += KGapCloser;
+            Orbwalker.OnPostAttack += Reset;
         }
 
         public static void Game_OnStart(EventArgs args)
