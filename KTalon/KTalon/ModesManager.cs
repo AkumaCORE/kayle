@@ -212,6 +212,32 @@ namespace KTalon
 
 
         }
+        public static void Flee()
+        {
+            var E = Program.E;
+            var R = Program.R;
+
+            if (E.IsReady() && !(Program._Player.HasBuff("TalonDisappear")))
+            {
+                R.Cast();
+
+
+            }
+
+            if (E.IsReady())
+            {
+                var EscapeTarget = EntityManager.MinionsAndMonsters.CombinedAttackable.FirstOrDefault(it => it.IsValidTarget(E.Range) && it.Distance(Game.CursorPos) <= 300 && !(Program._Player.HasBuff("TalonDisappear")));
+
+                if (EscapeTarget != null) E.Cast(EscapeTarget);
+
+                else
+                {
+                    EscapeTarget = EntityManager.MinionsAndMonsters.CombinedAttackable.FirstOrDefault(it => it.IsValidTarget(E.Range) && it.Distance(Game.CursorPos) <= 300 && !(Program._Player.HasBuff("TalonDisappear")));
+
+                    if (EscapeTarget != null) E.Cast(EscapeTarget);
+                }
+            }
+        }
         public static void KillSteal()
         {
             var Q = Program.Q;

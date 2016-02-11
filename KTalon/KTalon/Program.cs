@@ -73,6 +73,7 @@ namespace KTalon
                 W = new Spell.Skillshot(SpellSlot.W, 600, SkillShotType.Cone, 1, 2300, 75) { AllowedCollisionCount = int.MaxValue };
                 E = new Spell.Targeted(SpellSlot.E, 700);
                 R = new Spell.Active(SpellSlot.R);
+               
 
 
                
@@ -215,7 +216,12 @@ namespace KTalon
                 ModesManager.LastHit();
 
             }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
+            {
 
+
+                ModesManager.Flee();
+            }
            
 
             
