@@ -80,7 +80,7 @@ namespace KKayle
             {
                     Q.Cast(minion);
                 
-                if (E.IsReady() && Program.FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && minion.IsValidTarget(Q.Range) && (Cminion >= Program.FarmMenu["MinionE"].Cast<Slider>().CurrentValue))
+                if (E.IsReady() && Program.FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && minion.IsValidTarget(Q.Range) /*&& (Cminion >= Program.FarmMenu["MinionE"].Cast<Slider>().CurrentValue)*/)
                 {
                     E.Cast();
                 }
