@@ -39,14 +39,15 @@ namespace KLissandra
         public static Spell.Active W;
         public static Spell.Skillshot E;
         public static Spell.Targeted R;
-        private static MissileClient LissEMissile;
+        
 
 
         static void Main(string[] args)
         {
 
             Loading.OnLoadingComplete += Game_OnStart;
-            //Game.OnUpdate += Game_OnUpdate;
+            Game.OnUpdate += Game_OnUpdate;
+           // Game.OnUpdate += Ref.MonitorMissilePosition;
             Drawing.OnDraw += Game_OnDraw;
             //GameObject.OnCreate += Game_ObjectCreate;
             //GameObject.OnDelete += Game_OnDelete;
@@ -86,6 +87,7 @@ namespace KLissandra
                 //-----/-------//
                 //-Combo Menu-//
                 //-------/---//
+                Combo = Menu.AddSubMenu("Combo/Harass/KS", "Modes1Talon");
                 Combo.Add("ComboQ", new CheckBox("Use Q on Combo", true));
                 Combo.Add("ComboW", new CheckBox("Use W on Combo", true));
                 Combo.Add("ComboE", new CheckBox("Use E on Combo", true));
@@ -97,7 +99,7 @@ namespace KLissandra
                 //-------/---//
 
 
-                Harass.Add("HarassQ", new CheckBox("Use Q on Harass", true));
+            /*  Harass.Add("HarassQ", new CheckBox("Use Q on Harass", true));
                 Harass.Add("HarassW", new CheckBox("Use W on Harass", true));
                 Harass.Add("HarassE", new CheckBox("Use E on Harass", true));
 
@@ -130,7 +132,7 @@ namespace KLissandra
                 Misc.Add("useRGapCloser", new CheckBox("R on GapCloser", true));
                 Misc.Add("useWInterrupter", new CheckBox("use W to Interrupt", true));
                 Misc.Add("useRInterrupter", new CheckBox("use R to Interrupt", true));
-
+                */
                 //------------//
                 //-Draw Menu-//
                 //----------//
@@ -183,6 +185,54 @@ namespace KLissandra
             }
 
         }
+
+
+             static void Game_OnUpdate(EventArgs args)
+             {
+                
+
+                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                 {
+                     ModesManager.Combo();
+                 }
+                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+                 {
+                    // ModesManager.Harass();
+                 }
+
+                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+                 {
+
+                    // ModesManager.LaneClear();
+
+                 }
+                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+                 {
+
+                    // ModesManager.JungleClear();
+                 }
+
+
+
+                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
+                 {
+                    // ModesManager.LastHit();
+
+                 }
+
+
+
+
+
+
+
+
+             }
+
+
+
+
+
 
 
 
