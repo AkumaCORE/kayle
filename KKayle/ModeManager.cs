@@ -79,8 +79,8 @@ namespace KKayle
             if (Q.IsReady() && Program.FarmMenu["FarmQ"].Cast<CheckBox>().CurrentValue && Q.IsInRange(minion) && minion.IsValidTarget(Q.Range))
             {
                     Q.Cast(minion);
-                
-                if (E.IsReady() && Program.FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && minion.IsValidTarget(Q.Range) /*&& (Cminion >= Program.FarmMenu["MinionE"].Cast<Slider>().CurrentValue)*/)
+
+                    if (E.IsReady() && Program.FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && (Program._Player.Distance(minion) <= Program._Player.GetAutoAttackRange() + 400) /*&& (Cminion >= Program.FarmMenu["MinionE"].Cast<Slider>().CurrentValue)*/)
                 {
                     E.Cast();
                 }
