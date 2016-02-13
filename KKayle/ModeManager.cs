@@ -136,7 +136,7 @@ namespace KKayle
             var E = Program.E;
             var R = Program.R;
 
-            if (!W.IsReady())
+            if (!W.IsReady() && Program.PlayerInstance.IsRecalling())
             {
                 return;
             }
