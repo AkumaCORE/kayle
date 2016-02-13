@@ -140,7 +140,7 @@ namespace KKayle
             {
                 return;
             }
-          if(Program.HealMenu["AutoW"].Cast<CheckBox>().CurrentValue && (Program.PlayerInstance.IsRecalling())){
+          if(Program.HealMenu["AutoW"].Cast<CheckBox>().CurrentValue && !(Program.PlayerInstance.IsRecalling())){
                 var lowestHealthAlly = EntityManager.Heroes.Allies.Where(a => W.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
 
                 if (Program.HealthPercent() <= Program.HealMenu["HealSelf"].Cast<Slider>().CurrentValue)
