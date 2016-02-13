@@ -57,7 +57,33 @@ namespace KGragas
 
             }
 
+           /* var Player = Program.PlayerInstance;
+            var R = Program.R;
+            var insecpos = Program.insecpos;
+           var mov = Program.movingawaypos;
+            var eqpos = Program.eqpos;
+            var alvo = TargetSelector.GetTarget(Program.R.Range, DamageType.Magical);
+            eqpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo)).To3D();
+            insecpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
+            mov = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 350).To3D();
+            eqpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
+            if (R.IsReady())
+            {
 
+
+            
+                if (insecpos.Distance(Player.Position) < R.Range - 20)
+                {
+                    if (Player.Distance(insecpos.Extend(alvo.Position.To2D(), 900 - alvo.Distance(alvo))) < Program.E.Range && alvo.IsFacing(Player))
+                    {
+                        R.Cast(insecpos);
+                    }
+                }
+            }*/
+               
+         
+
+           
         }
 
         public static void Harass()
@@ -68,13 +94,12 @@ namespace KGragas
             var E = Program.E;
             var R = Program.R;
             var alvo = TargetSelector.GetTarget(Program.R.Range, DamageType.Magical);
-            var predPos = Prediction.Position.PredictLinearMissile(alvo, Program.R.Range, Program.R.Width, Program.R.CastDelay, Program.R.Speed, int.MaxValue, null, false);
             if (!alvo.IsValid()) return;
             if ((Program._Player.ManaPercent <= Program.ModesMenu1["ManaH"].Cast<Slider>().CurrentValue))
             {
                 return;
             }
-            if (Q.IsReady() && alvo.IsValidTarget(Q.Range) && Program.ModesMenu1["HarassQ"].Cast<CheckBox>().CurrentValue && (Program.CastedQ = false))
+            if (Q.IsReady() && alvo.IsValidTarget(Q.Range) && Program.ModesMenu1["HarassQ"].Cast<CheckBox>().CurrentValue)
             {
                 Q.Cast(alvo);
                 Program.CastedQ = true;
@@ -223,10 +248,43 @@ namespace KGragas
             }
 
 
-  
+  public static void Insec()
+        {
+            var Player = Program.PlayerInstance;
+            var R = Program.R;
+            var  insecpos = Program.insecpos;
+            var mov = Program.movingawaypos;
+            var eqpos = Program.eqpos;
+           var alvo = TargetSelector.GetTarget(Program.R.Range, DamageType.Magical);
+           Orbwalker.MoveTo(Game.CursorPos);
+
+           eqpos = Player.Position.Extend(alvo,R.Range + 300).To3D();
+           insecpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
+           mov = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 300).To3D();
+
+           if (R.IsReady() && !(alvo == null))
+           {
+               if (alvo.IsFacing(Player) == false && alvo.IsMoving & (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300))
+                   R.Cast(mov);
+
+               if (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300 && alvo.IsFacing(Player) && alvo.IsMoving)
+                   R.Cast(eqpos);
+
+               else if (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300)
+                   R.Cast(insecpos);
+
+           }
+        }
+
+
+
+
+
+
+    }
 
 
 
         }
-    }
+    
 

@@ -152,11 +152,9 @@ namespace KGragas
                 //------------//
                 //-Misc Menu-//
                 //----------//
-                //var Enemies = EntityManager.Heroes.Enemies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
                 Misc = Menu.AddSubMenu("MiscMenu", "Misc");
-                //Misc.Add("aarest", new CheckBox("Reset AA with w"));
                 Misc.Add("useEGapCloser", new CheckBox("E on GapCloser", true));
-                Misc.Add("useEGapCloser", new CheckBox("R on GapCloser", true));
+                Misc.Add("useRGapCloser", new CheckBox("R on GapCloser", true));
                 Misc.Add("useEInterrupter", new CheckBox("use E to Interrupt", true));
                 Misc.Add("useRInterrupter", new CheckBox("use R to Interrupt", true));
                 Misc.Add("Key", new KeyBind("Key to insec", false,KeyBind.BindTypes.HoldActive, (uint) 'A'));
@@ -196,7 +194,12 @@ namespace KGragas
 
         static void Game_OnUpdate(EventArgs args)
         {
-            InsecLogic.Insec();
+            if (Misc["Key"].Cast<KeyBind>().CurrentValue)
+            {
+                ModesManager.Insec();
+
+
+            }
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
@@ -226,6 +229,13 @@ namespace KGragas
                 ModesManager.LastHit();
 
             }
+
+
+
+
+
+
+
 
         }
 
@@ -284,20 +294,6 @@ namespace KGragas
 
             }
         }
-
-
-
-
-        private static readonly KeyBind Key;
-
-        public static bool KeyI
-        {
-            get { return Key.CurrentValue; }
-        }
-
-
- 
-
 
 
 

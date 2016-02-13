@@ -26,12 +26,12 @@ namespace KGragas
            insecpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
            mov = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 300).To3D();
 
-           if (Program.KeyI == true)
+           if (Program.Misc["Key"].Cast<KeyBind>().CurrentValue)
            {
            Orbwalker.OrbwalkTo(Game.CursorPos);   
 
                if (alvo.IsFacing(Player) == false && alvo.IsMoving & (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300))
-                   R.Cast(mov);
+                   R.Cast(mov); 
 
                if (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300 && alvo.IsFacing(Player) && alvo.IsMoving)
                    R.Cast(eqpos);
