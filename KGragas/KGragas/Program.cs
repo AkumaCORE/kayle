@@ -102,7 +102,7 @@ namespace KGragas
                 ModesMenu1.Add("ComboQ", new CheckBox("Use Q on Combo", true));
                 ModesMenu1.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu1.Add("ComboE", new CheckBox("Use E on Combo", true));
-                ModesMenu1.Add("ComboR", new CheckBox("Use R on Combo", true));
+                ModesMenu1.Add("ComboR", new CheckBox("Use R on Combo", false));
                 ModesMenu1.AddLabel("Use R only on:");
                 foreach (var a in Enemies)
                 {

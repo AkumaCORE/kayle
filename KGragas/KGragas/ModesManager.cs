@@ -46,7 +46,7 @@ namespace KGragas
 
 
             }
-            if (R.IsReady() && alvo.IsValidTarget(R.Range) && Program.ModesMenu1["ComboR"].Cast<CheckBox>().CurrentValue && Program.ModesMenu1["Ult_" + alvo.BaseSkinName].Cast<CheckBox>().CurrentValue)//&& !(Q.IsInRange(alvo)))
+            if (R.IsReady() && alvo.IsValidTarget(R.Range) && !(Program.ModesMenu1["ComboR"].Cast<CheckBox>().CurrentValue) && Program.ModesMenu1["Ult_" + alvo.BaseSkinName].Cast<CheckBox>().CurrentValue)//&& !(Q.IsInRange(alvo)))
             {
                 R.Cast(predPos.CastPosition + 100);
 
