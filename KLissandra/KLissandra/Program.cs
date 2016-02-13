@@ -15,7 +15,7 @@ namespace KLissandra
 {
     class Program
     {
-        public const string ChampionName = "Lissandra";
+       /* public const string ChampionName = "Lissandra";
         public static Menu Menu, Combo, Harass, Farm, KillSteal, Misc, DrawMenu;
         public static AIHeroClient PlayerInstance
         {
@@ -99,7 +99,7 @@ namespace KLissandra
                 //-------/---//
 
 
-            /*  Harass.Add("HarassQ", new CheckBox("Use Q on Harass", true));
+              Harass.Add("HarassQ", new CheckBox("Use Q on Harass", true));
                 Harass.Add("HarassW", new CheckBox("Use W on Harass", true));
                 Harass.Add("HarassE", new CheckBox("Use E on Harass", true));
 
@@ -132,7 +132,7 @@ namespace KLissandra
                 Misc.Add("useRGapCloser", new CheckBox("R on GapCloser", true));
                 Misc.Add("useWInterrupter", new CheckBox("use W to Interrupt", true));
                 Misc.Add("useRInterrupter", new CheckBox("use R to Interrupt", true));
-                */
+                
                 //------------//
                 //-Draw Menu-//
                 //----------//
@@ -234,7 +234,7 @@ namespace KLissandra
 
 
 
-
+*/
 
         }
     }
