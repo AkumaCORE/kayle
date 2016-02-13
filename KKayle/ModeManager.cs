@@ -27,7 +27,7 @@ namespace KKayle
             {
                 Q.Cast(alvo);
             }
-            if (W.IsReady() && W.IsInRange(alvo))
+            if (W.IsReady() && W.IsInRange(alvo) && Program.ComboMenu["ComboW"].Cast<CheckBox>().CurrentValue)
             {
                 W.Cast(Player.Instance);
             }
@@ -135,30 +135,31 @@ namespace KKayle
             var W = Program.W;
             var E = Program.E;
             var R = Program.R;
-            
+
             if (!W.IsReady())
             {
                 return;
             }
+          if(Program.HealMenu["AutoW"].Cast<CheckBox>().CurrentValue){
+                var lowestHealthAlly = EntityManager.Heroes.Allies.Where(a => W.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
 
-            var lowestHealthAlly = EntityManager.Heroes.Allies.Where(a => W.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
-
-            if (Program.HealthPercent() <= Program.HealMenu["HealSelf"].Cast<Slider>().CurrentValue)
-            {
-                W.Cast(Program.PlayerInstance);
-            }
-
-            else if (lowestHealthAlly != null)
-            {
-                if (!(lowestHealthAlly.Health <= Program.HealMenu["HealAlly"].Cast<Slider>().CurrentValue))
+                if (Program.HealthPercent() <= Program.HealMenu["HealSelf"].Cast<Slider>().CurrentValue)
                 {
-                    return;
+                    W.Cast(Program.PlayerInstance);
                 }
-                if (Program.HealMenu["autoHeal_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
+
+                else if (lowestHealthAlly != null)
                 {
-                    W.Cast(lowestHealthAlly);
+                    if (!(lowestHealthAlly.Health <= Program.HealMenu["HealAlly"].Cast<Slider>().CurrentValue))
+                    {
+                        return;
+                    }
+                    if (Program.HealMenu["autoHeal_" + lowestHealthAlly.BaseSkinName].Cast<CheckBox>().CurrentValue)
+                    {
+                        W.Cast(lowestHealthAlly);
+                    }
                 }
-            }
+          }
           }
             public static void AutoUlt()
              {
