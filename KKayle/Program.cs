@@ -104,7 +104,7 @@ namespace KKayle
                 FarmMenu.AddSeparator();
                 FarmMenu.AddLabel("Last Hit");
                 FarmMenu.Add("LastQ", new CheckBox("Use Q to Last Hit", true));
-                FarmMenu.Add("LastE", new CheckBox("Use E to Last Hit", true));
+               // FarmMenu.Add("LastE", new CheckBox("Use E to Last Hit", true));
                
 
                 // Heal Menu

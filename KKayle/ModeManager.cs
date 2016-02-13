@@ -121,15 +121,15 @@ namespace KKayle
             var Q = Program.Q;
             var E = Program.E;
             var qminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(Program.Q.Range) && (DamageLib.QCalc(m) > m.Health));
-            var eminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(Program.Q.Range) && (DamageLib.ECalc(m) > m.Health));
+            var eminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(Program.Q.Range) && (DamageLib.ECalc(m) > m.Health + 50));
             if (qminions == null) return;
 
             if (Q.IsReady() && Program.Q.IsInRange(qminions) && Program.FarmMenu["LastQ"].Cast<CheckBox>().CurrentValue && qminions.Health < DamageLib.QCalc(qminions))
 
                 Q.Cast(qminions);
-            if (E.IsReady() && Program.Q.IsInRange(eminions) && Program.FarmMenu["LastE"].Cast<CheckBox>().CurrentValue && eminions.Health < DamageLib.ECalc(qminions))
+          //  if (E.IsReady() && Program.Q.IsInRange(eminions) && Program.FarmMenu["LastE"].Cast<CheckBox>().CurrentValue && (eminions.Health + 150) < DamageLib.ECalc(eminions))
 
-                E.Cast();
+            //    E.Cast();
         }
              public static void AutoHeal()
              {
