@@ -115,18 +115,22 @@ namespace KKayle
             }
         }
 
-             public static void LastHit()
-             {
+        public static void LastHit()
+        {
 
-                 var Q = Program.Q;
-                 var qminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(Program.Q.Range) && (DamageLib.QCalc(m) > m.Health));
-                 if (qminions == null) return;
+            var Q = Program.Q;
+            var E = Program.E;
+            var qminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(Program.Q.Range) && (DamageLib.QCalc(m) > m.Health));
+            var eminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget(Program.Q.Range) && (DamageLib.ECalc(m) > m.Health));
+            if (qminions == null) return;
 
-                 if (Q.IsReady() && Program.Q.IsInRange(qminions) && Program.FarmMenu["LastQ"].Cast<CheckBox>().CurrentValue && qminions.Health < DamageLib.QCalc(qminions))
+            if (Q.IsReady() && Program.Q.IsInRange(qminions) && Program.FarmMenu["LastQ"].Cast<CheckBox>().CurrentValue && qminions.Health < DamageLib.QCalc(qminions))
 
-                     Q.Cast(qminions);
-             }
+                Q.Cast(qminions);
+            if (E.IsReady() && Program.Q.IsInRange(eminions) && Program.FarmMenu["LastE"].Cast<CheckBox>().CurrentValue && eminions.Health < DamageLib.ECalc(qminions))
 
+                E.Cast();
+        }
              public static void AutoHeal()
              {
 
