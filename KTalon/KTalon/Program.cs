@@ -233,7 +233,11 @@ namespace KTalon
 
         public static void Game_OnTick(EventArgs args)
         {
+      
 
+            ModesManager.KillSteal();
+
+        
         }
 
 

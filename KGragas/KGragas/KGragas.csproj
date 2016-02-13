@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="DamageLib.cs" />
     <Compile Include="Insec.cs" />
+    <Compile Include="InsecLogic.cs" />
     <Compile Include="ModesManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

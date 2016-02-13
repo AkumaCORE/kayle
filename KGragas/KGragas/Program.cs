@@ -39,6 +39,8 @@ namespace KGragas
         public static Spell.Skillshot R;
         public static Spell.Targeted Ignite;
         public static bool CastedQ;
+        public static Vector3 insecpos, eqpos, movingawaypos;
+        public static Vector3 teste;
 
 
 
@@ -136,7 +138,7 @@ namespace KGragas
                 ModesMenu2.Add("JungQ", new CheckBox("Use Q on ungle", true));
                 ModesMenu2.Add("JungW", new CheckBox("Use W on Jungle", true));
                 ModesMenu2.Add("JungE", new CheckBox("Use E on Jungle", true));
-                
+
 
 
                 //------------//
@@ -157,6 +159,7 @@ namespace KGragas
                 Misc.Add("useEGapCloser", new CheckBox("R on GapCloser", true));
                 Misc.Add("useEInterrupter", new CheckBox("use E to Interrupt", true));
                 Misc.Add("useRInterrupter", new CheckBox("use R to Interrupt", true));
+                Misc.Add("Key", new KeyBind("Key to insec", false,KeyBind.BindTypes.HoldActive, (uint) 'A'));
 
             }
 
@@ -193,7 +196,7 @@ namespace KGragas
 
         static void Game_OnUpdate(EventArgs args)
         {
-
+            InsecLogic.Insec();
 
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
@@ -226,9 +229,10 @@ namespace KGragas
 
         }
 
-        static void Game_OnTick(EventArgs args){
+        static void Game_OnTick(EventArgs args)
+        {
 
-           ModesManager.KillSteal();
+            ModesManager.KillSteal();
 
         }
 
@@ -277,21 +281,26 @@ namespace KGragas
             if (sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < R.Range && R.IsReady() && Misc["useRGapCloser"].Cast<CheckBox>().CurrentValue)
             {
                 R.Cast(sender);
+
             }
         }
 
 
 
 
+        private static readonly KeyBind Key;
+
+        public static bool KeyI
+        {
+            get { return Key.CurrentValue; }
+        }
+
+
+ 
 
 
 
 
-
-
-
-
-
-
+        }
     }
-}
+

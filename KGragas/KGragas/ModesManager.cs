@@ -31,7 +31,7 @@ namespace KGragas
 
             if (Q.IsReady() && alvo.IsValidTarget(Q.Range) && Program.ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue)
             {
-                Q.Cast(predPosQ.CastPosition);
+                Q.Cast(alvo);
                 Program.CastedQ = true;
             }
 
@@ -76,7 +76,7 @@ namespace KGragas
             }
             if (Q.IsReady() && alvo.IsValidTarget(Q.Range) && Program.ModesMenu1["HarassQ"].Cast<CheckBox>().CurrentValue && (Program.CastedQ = false))
             {
-                Q.Cast(Q.GetPrediction(alvo).CastPosition);
+                Q.Cast(alvo);
                 Program.CastedQ = true;
             }
 
@@ -221,9 +221,9 @@ namespace KGragas
                 }
 
             }
-       
 
 
+  
 
 
 
