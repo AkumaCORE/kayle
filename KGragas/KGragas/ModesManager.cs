@@ -252,6 +252,8 @@ namespace KGragas
         {
             var Player = Program.PlayerInstance;
             var R = Program.R;
+            var Q = Program.Q;
+            var E = Program.E;
             var  insecpos = Program.insecpos;
             var mov = Program.movingawaypos;
             var eqpos = Program.eqpos;
@@ -273,7 +275,25 @@ namespace KGragas
                else if (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300)
                    R.Cast(insecpos);
 
+               if (Q.IsReady() && alvo.IsValidTarget(Q.Range) )
+            {
+                Q.Cast(alvo);
+                Program.CastedQ = true;
+            }
+
+            if (E.IsReady() && alvo.IsValidTarget(E.Range))
+            {
+                E.Cast(alvo);
+
+
            }
+
+
+
+
+
+
+
         }
 
 
