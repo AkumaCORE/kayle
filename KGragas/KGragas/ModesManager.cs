@@ -12,10 +12,10 @@ using System.Linq;
 namespace KGragas
 {
 
-   
+
     internal class ModesManager
     {
-       
+
 
         public static void Combo()
         {
@@ -57,33 +57,33 @@ namespace KGragas
 
             }
 
-           /* var Player = Program.PlayerInstance;
-            var R = Program.R;
-            var insecpos = Program.insecpos;
-           var mov = Program.movingawaypos;
-            var eqpos = Program.eqpos;
-            var alvo = TargetSelector.GetTarget(Program.R.Range, DamageType.Magical);
-            eqpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo)).To3D();
-            insecpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
-            mov = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 350).To3D();
-            eqpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
-            if (R.IsReady())
-            {
+            /* var Player = Program.PlayerInstance;
+             var R = Program.R;
+             var insecpos = Program.insecpos;
+            var mov = Program.movingawaypos;
+             var eqpos = Program.eqpos;
+             var alvo = TargetSelector.GetTarget(Program.R.Range, DamageType.Magical);
+             eqpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo)).To3D();
+             insecpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
+             mov = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 350).To3D();
+             eqpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
+             if (R.IsReady())
+             {
 
 
             
-                if (insecpos.Distance(Player.Position) < R.Range - 20)
-                {
-                    if (Player.Distance(insecpos.Extend(alvo.Position.To2D(), 900 - alvo.Distance(alvo))) < Program.E.Range && alvo.IsFacing(Player))
-                    {
-                        R.Cast(insecpos);
-                    }
-                }
-            }*/
-               
-         
+                 if (insecpos.Distance(Player.Position) < R.Range - 20)
+                 {
+                     if (Player.Distance(insecpos.Extend(alvo.Position.To2D(), 900 - alvo.Distance(alvo))) < Program.E.Range && alvo.IsFacing(Player))
+                     {
+                         R.Cast(insecpos);
+                     }
+                 }
+             }*/
 
-           
+
+
+
         }
 
         public static void Harass()
@@ -154,7 +154,7 @@ namespace KGragas
 
         }
 
-            public static void LastHit()
+        public static void LastHit()
         {
             var Q = Program.Q;
             var W = Program.W;
@@ -166,11 +166,11 @@ namespace KGragas
             if (qminions == null) return;
             var prediction = Program.Q.GetPrediction(qminions);
             if (Q.IsReady() && Program.Q.IsInRange(qminions) && Program.ModesMenu2["LastQ"].Cast<CheckBox>().CurrentValue && qminions.Health < DamageLib.QCalc(qminions))
-                
-                    Q.Cast(Q.GetPrediction(qminions).CastPosition);
 
-                    Program.CastedQ = true;
-                
+                Q.Cast(Q.GetPrediction(qminions).CastPosition);
+
+            Program.CastedQ = true;
+
             if (Program.E.IsReady() && Program.E.IsInRange(eminions) && Program.ModesMenu2["LastE"].Cast<CheckBox>().CurrentValue && eminions.Health < DamageLib.ECalc(eminions))
             {
                 E.Cast(eminions);
@@ -179,115 +179,122 @@ namespace KGragas
 
 
         }
-        
-            public static void JungleClear()
+
+        public static void JungleClear()
+        {
+            var Q = Program.Q;
+            var W = Program.W;
+            var E = Program.E;
+            var R = Program.R;
+
+            var jungleMonsters = EntityManager.MinionsAndMonsters.GetJungleMonsters().OrderByDescending(j => j.Health).FirstOrDefault(j => j.IsValidTarget(Program.Q.Range));
+            var minioon = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, Program.E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
+            if (jungleMonsters == null) return;
+            if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaJ"].Cast<Slider>().CurrentValue))
             {
-                var Q = Program.Q;
-                var W = Program.W;
-                var E = Program.E;
-                var R = Program.R;
-
-                var jungleMonsters = EntityManager.MinionsAndMonsters.GetJungleMonsters().OrderByDescending(j => j.Health).FirstOrDefault(j => j.IsValidTarget(Program.Q.Range));
-                var minioon = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, Program.E.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
-                if (jungleMonsters == null) return;
-                if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaJ"].Cast<Slider>().CurrentValue))
-                {
-                    return;
-                }
-                if (Q.IsReady() && Q.IsInRange(jungleMonsters) && Program.ModesMenu2["JungQ"].Cast<CheckBox>().CurrentValue)
-                  
-                        Q.Cast(Q.GetPrediction(jungleMonsters).CastPosition);
-
-                        Program.CastedQ = true;
-                    
-
-                if (W.IsReady() && E.IsInRange(jungleMonsters)  &&  Program.ModesMenu2["JungW"].Cast<CheckBox>().CurrentValue)
-                {
-                    W.Cast();
-
-                }
-                if (E.IsReady() && E.IsInRange(jungleMonsters) && Program.ModesMenu1["JungE"].Cast<CheckBox>().CurrentValue)
-                {
-                    E.Cast(jungleMonsters);
-
-                }
+                return;
             }
+            if (Q.IsReady() && Q.IsInRange(jungleMonsters) && Program.ModesMenu2["JungQ"].Cast<CheckBox>().CurrentValue)
+
+                Q.Cast(Q.GetPrediction(jungleMonsters).CastPosition);
+
+            Program.CastedQ = true;
 
 
-
-            public static void KillSteal()
+            if (W.IsReady() && E.IsInRange(jungleMonsters) && Program.ModesMenu2["JungW"].Cast<CheckBox>().CurrentValue)
             {
-                var Q = Program.Q;
-                var W = Program.W;
-                var E = Program.E;
-                var R = Program.R;
+                W.Cast();
+
+            }
+            if (E.IsReady() && E.IsInRange(jungleMonsters) && Program.ModesMenu1["JungE"].Cast<CheckBox>().CurrentValue)
+            {
+                E.Cast(jungleMonsters);
+
+            }
+        }
 
 
-                foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && !a.IsZombie && a.Health > 0))
+
+        public static void KillSteal()
+        {
+            var Q = Program.Q;
+            var W = Program.W;
+            var E = Program.E;
+            var R = Program.R;
+
+
+            foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && !a.IsZombie && a.Health > 0))
+            {
+                if (enemy.IsValidTarget(R.Range) && enemy.HealthPercent <= 40)
                 {
-                    if (enemy.IsValidTarget(R.Range) && enemy.HealthPercent <= 40)
+
+                    if (DamageLib.ECalc(enemy) + DamageLib.ECalc(enemy) + DamageLib.RCalc(enemy) >= enemy.Health)
                     {
-
-                        if (DamageLib.ECalc(enemy) + DamageLib.ECalc(enemy) + DamageLib.RCalc(enemy) >= enemy.Health)
+                        if (Program.ModesMenu1["KQ"].Cast<CheckBox>().CurrentValue && (DamageLib.ECalc(enemy) >= enemy.Health) && Q.IsInRange(enemy) && Q.IsReady())
                         {
-                            if (Program.ModesMenu1["KQ"].Cast<CheckBox>().CurrentValue && (DamageLib.ECalc(enemy) >= enemy.Health) && Q.IsInRange(enemy) && Q.IsReady())
-                            {
-                                Q.Cast(Q.GetPrediction(enemy).CastPosition);
+                            Q.Cast(Q.GetPrediction(enemy).CastPosition);
 
-                                Program.CastedQ = true;
-                            }
-                            if (Program.ModesMenu1["KE"].Cast<CheckBox>().CurrentValue && (DamageLib.ECalc(enemy) >= enemy.Health) && E.IsInRange(enemy) && E.IsReady())
-                            { R.Cast(enemy); }
-                            if (Program.ModesMenu1["KR"].Cast<CheckBox>().CurrentValue && (DamageLib.RCalc(enemy) >= enemy.Health) && R.IsInRange(enemy) && R.IsReady())
-                            { R.Cast(enemy); }
+                            Program.CastedQ = true;
                         }
-
+                        if (Program.ModesMenu1["KE"].Cast<CheckBox>().CurrentValue && (DamageLib.ECalc(enemy) >= enemy.Health) && E.IsInRange(enemy) && E.IsReady())
+                        { R.Cast(enemy); }
+                        if (Program.ModesMenu1["KR"].Cast<CheckBox>().CurrentValue && (DamageLib.RCalc(enemy) >= enemy.Health) && R.IsInRange(enemy) && R.IsReady())
+                        { R.Cast(enemy); }
                     }
-                }
 
+                }
             }
 
+        }
 
-  public static void Insec()
+
+        public static void Insec()
         {
             var Player = Program.PlayerInstance;
             var R = Program.R;
             var Q = Program.Q;
             var E = Program.E;
-            var  insecpos = Program.insecpos;
+            var insecpos = Program.insecpos;
             var mov = Program.movingawaypos;
             var eqpos = Program.eqpos;
-           var alvo = TargetSelector.GetTarget(Program.R.Range, DamageType.Magical);
-           Orbwalker.MoveTo(Game.CursorPos);
+            var alvo = TargetSelector.GetTarget(Program.R.Range, DamageType.Magical);
+            Orbwalker.MoveTo(Game.CursorPos);
 
-           eqpos = Player.Position.Extend(alvo,R.Range + 300).To3D();
-           insecpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
-           mov = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 300).To3D();
+            eqpos = Player.Position.Extend(alvo, R.Range + 300).To3D();
+            insecpos = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 200).To3D();
+            mov = Player.Position.Extend(alvo.Position, Player.Distance(alvo) + 300).To3D();
 
-           if (R.IsReady() && !(alvo == null))
-           {
-               if (alvo.IsFacing(Player) == false && alvo.IsMoving & (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300))
-                   R.Cast(mov);
-
-               if (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300 && alvo.IsFacing(Player) && alvo.IsMoving)
-                   R.Cast(eqpos);
-
-               else if (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300)
-                   R.Cast(insecpos);
-
-               if (Q.IsReady() && alvo.IsValidTarget(Q.Range) )
+            if (R.IsReady() && !(alvo == null))
             {
-                Q.Cast(alvo);
-                Program.CastedQ = true;
+                if (alvo.IsFacing(Player) == false && alvo.IsMoving & (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300))
+                    R.Cast(mov);
+
+                if (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300 && alvo.IsFacing(Player) && alvo.IsMoving)
+                    R.Cast(eqpos);
+
+                else if (R.IsInRange(insecpos) && alvo.Distance(insecpos) < 300)
+                    R.Cast(insecpos);
+
+                if (Q.IsReady() && alvo.IsValidTarget(Q.Range))
+                {
+                    Q.Cast(alvo);
+                    Program.CastedQ = true;
+                }
+
+                if (E.IsReady() && alvo.IsValidTarget(E.Range))
+                {
+                    E.Cast(alvo);
+
+
+                }
+
+
+
+
+
+
+
             }
-
-            if (E.IsReady() && alvo.IsValidTarget(E.Range))
-            {
-                E.Cast(alvo);
-
-
-           }
-
 
 
 
@@ -295,16 +302,10 @@ namespace KGragas
 
 
         }
-
-
-
 
 
 
     }
-
-
-
-        }
+}
     
 
