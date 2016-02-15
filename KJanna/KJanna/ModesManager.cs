@@ -21,7 +21,7 @@ namespace KJanna
             var W = Program.W;
             var E = Program.E;
             var R = Program.R;
-            var alvoQ = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
+            var alvoQ = TargetSelector.GetTarget(R.Range, DamageType.Magical);
             var alvoW = TargetSelector.GetTarget(W.Range, DamageType.Magical);
             if (!alvoQ.IsValid()) return;
             if (!alvoW.IsValid()) return;
@@ -30,7 +30,9 @@ namespace KJanna
                 Q.Cast(alvoQ);
                 if ((Program._Player.HasBuff("Holing Gale")))
                 {
+                    ;
                     Q.Cast(alvoQ);
+
                }
 
            }

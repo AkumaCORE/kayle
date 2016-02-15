@@ -24,7 +24,7 @@ namespace KTalon
         public static float RCalc(Obj_AI_Base target)
         {
             return _Player.CalculateDamageOnUnit(target, DamageType.Physical,
-                (float)(new[] { 0, 240, 370, 440 }[Program.R.Level] + 0.85 * _Player.FlatPhysicalDamageMod
+                (float)(new[] { 0, 450, 650, 850 }[Program.R.Level] + 0.85f * _Player.FlatPhysicalDamageMod
                     ));
         }
         public static float DmgCalc(AIHeroClient target)

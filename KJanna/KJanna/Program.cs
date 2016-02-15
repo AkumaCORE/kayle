@@ -55,7 +55,8 @@ namespace KJanna
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Game_OnDraw;
             Obj_AI_Base.OnProcessSpellCast += OnCast;
-            GameObject.OnCreate += this.TowerAttackOnCreate;
+           
+           // GameObject.OnCreate += TowerAttackOnCreate;
             //GameObject.OnCreate += Game_ObjectCreate;
             //GameObject.OnDelete += Game_OnDelete;
             //Orbwalker.OnPostAttack += Reset;
@@ -78,7 +79,7 @@ namespace KJanna
                 Bootstrap.Init(null);
                 Chat.Print("KJanna SuPorT Addon Loading Success", Color.Green);
 
-                Q = new Spell.Skillshot(SpellSlot.Q, 850, SkillShotType.Linear, 1, 900, 120);
+                Q = new Spell.Skillshot(SpellSlot.Q, 950, SkillShotType.Linear, 1, 900, 120);
                 Q.AllowedCollisionCount = int.MaxValue;
                 W = new Spell.Targeted(SpellSlot.W, 600);
                 E = new Spell.Targeted(SpellSlot.E, 800);
@@ -109,9 +110,13 @@ namespace KJanna
                 //-----------//
 
 
-
+                var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
                 Misc = Menu.AddSubMenu("Misc", "MiscJanna");
                 Misc.Add("AutoE", new CheckBox("Auto use E", true));
+                foreach (var a in allies)
+                {
+                    Misc.Add("autoE" + a.BaseSkinName, new CheckBox("Use E on: " + a.BaseSkinName));
+                }
                 Misc.Add("qInterrupt", new CheckBox("Interrupt with Q", true));
                 Misc.Add("rInterrupt", new CheckBox("Interrupt with R", true));
                 Misc.Add("GapQ", new CheckBox("Anti-GapCloser with Q", true));
@@ -204,48 +209,54 @@ namespace KJanna
         public static void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (_Player.IsDead || !sender.IsEnemy || !(sender is AIHeroClient)) return;
+            var lowestHealthAllies = EntityManager.Heroes.Allies.Where(a => R.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
 
-            if (sender.IsAlly && sender is Obj_AI_Base && args.Target.IsAlly && E.IsReady() && args.Target.Position.Distance(Player.Instance.Position) <= E.Range)
+            if (sender.IsAlly && args.Target.IsEnemy && E.IsInRange(sender) && Program._Player.Distance(sender) <= Program._Player.GetAutoAttackRange() + 500)
             {
-                // List<AIHeroClient> Allies = new List<AIHeroClient>();
 
-                if (args.Target != null)
-                {
-                    if (args.Target.IsAlly || args.Target.IsMe)
-                    {
-                        var target = EntityManager.Heroes.Allies.FirstOrDefault(x => x.ServerPosition.Distance(args.Target.Position) < 5);
+                E.Cast(sender);
+            }
+            
 
-                        if (target != null) E.Cast(target);
-                        return;
-
-
-                    }
-
-
-
-
-                }
             }
 
-        }
+
+        
 
 
-        public static void TowerAttackOnCreate(GameObject sender, EventArgs args)
+/*        public static void TowerAttackOnCreate(GameObject sender, EventArgs args)
         {
 
-            if (!E.IsReady())
+                 /*  var lowestHealthAllies = EntityManager.Heroes.Allies.Where(a => R.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
+            var enemy = EntityManager.Heroes.Enemies.Where(a => R.IsInRange(a) && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
+            var alvoQ = TargetSelector.GetTarget(R.Range, DamageType.Magical);
+            if (sender.IsMe && args.SData.Name == "ReapTheWhrilwind")
             {
-                return;
-            }
+                Orbwalker.DisableAttacking = true;
+                Orbwalker.DisableMovement = true;
+                
 
-           
-                var missile = (MissileClient)sender;
-            var turrent = Obj_AI_Turret.m
+
+            }
+            if (!E.IsReady()) return;
+         if (sender.IsAlly && args.Target.IsEnemy && E.IsInRange(sender) && Program._Player.Distance(alvoQ) <= Program._Player.GetAutoAttackRange() + 500){
+
+                E.Cast(sender);
+
+
+            }
+            if (sender.IsEnemy && args.Target.IsAlly && sender.Type != GameObjectType.obj_AI_Minion)
+            {
+
+                E.Cast(lowestHealthAllies);
+
+
+            }*/
 
         }
-
+        
 
     }
-}
+
 
         

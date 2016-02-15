@@ -123,7 +123,7 @@ namespace KGragas
 
                 ModesMenu2 = Menu.AddSubMenu("Lane/Jungle/Last", "Modes2Gragas");
                 ModesMenu2.AddLabel("LastHit Configs");
-                ModesMenu2.Add("ManaL", new Slider("Dont use Skills if Mana <=", 40));
+                ModesMenu2.Add("ManaL", new Slider("Dont use Skills if Mana <= ", 40));
                 ModesMenu2.Add("LastQ", new CheckBox("Use Q on LastHit", true));
                 ModesMenu2.Add("LastW", new CheckBox("Use W on LastHit", true));
                 ModesMenu2.Add("LastE", new CheckBox("Use E on LastHit", true));
