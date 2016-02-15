@@ -106,6 +106,29 @@ namespace KTalon
                 }
 
             }
+            //Caso 4
+            if (ComboMode.CurrentValue == 4)
+            {
+                if (useE && E.IsReady() && E.IsInRange(alvo) && (Q.IsReady() || E.IsReady()))
+                {
+                    E.Cast(alvo);
+                }
+
+                if (Q.IsReady())
+                {
+                    Q.Cast();
+                }
+                if (useR && Q.IsReady())
+                {
+                    R.Cast();
+                }
+                if (useW && W.IsReady() && W.IsInRange(alvo))
+                {
+                    W.Cast(alvo);
+                }
+
+            }
+
         }
         public static void Harass()
         {

@@ -93,7 +93,7 @@ namespace KTalon
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Combo Configs");
                 ModesMenu1.AddLabel("1 = E/Q/W/R // 2 = R/E/Q/W // 3 = E/R/Q/W");
-                ComboMode = ModesMenu1.Add("comboMode", new Slider("Mode", 1, 1, 3));
+                ComboMode = ModesMenu1.Add("comboMode", new Slider("Mode", 1, 1, 4));
                 ModesMenu1.Add("ComboQ", new CheckBox("Use Q on Combo", true));
                 ModesMenu1.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu1.Add("ComboE", new CheckBox("Use E on Combo", true));
