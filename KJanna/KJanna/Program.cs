@@ -18,7 +18,7 @@ namespace KJanna
     {
 
 
-        public const string ChampionName = "Janna";
+       /* public const string ChampionName = "Janna";
         public static Menu Menu, Combo, DrawMenu, Misc;
         public static AIHeroClient PlayerInstance
         {
