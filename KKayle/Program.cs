@@ -102,7 +102,7 @@ namespace KKayle
                 FarmMenu = Menu.AddSubMenu("Farm", "FarmKayle");
                 FarmMenu.Add("ManaF", new Slider("No Skills when mana  <=", 40));
                 FarmMenu.Add("FarmQ", new CheckBox("Use Q to Farm", true));
-                FarmMenu.Add("FarmE", new CheckBox("Usar E to Farm", true));
+                FarmMenu.Add("FarmE", new CheckBox("Use E to Farm", true));
                 FarmMenu.Add("MinionE", new Slider("Only use E to Lane clear if minions on lane >=", 3, 1, 5));
                 FarmMenu.AddSeparator();
                 FarmMenu.AddLabel("Last Hit");
@@ -113,12 +113,12 @@ namespace KKayle
                 // Heal Menu
                 var allies = EntityManager.Heroes.Allies.Where(a => !a.IsMe).OrderBy(a => a.BaseSkinName);
                 HealMenu = Menu.AddSubMenu("Heal", "HealKayle");
-                HealMenu.Add("autoW", new CheckBox("Usar W automatic", true));
+                HealMenu.Add("autoW", new CheckBox("Use W automatic", true));
                 HealMenu.Add("HealSelf", new Slider("Self W when % HP", 50));
                 HealMenu.Add("HealAlly", new Slider("Heal Ally when % HP", 50));
                 foreach (var a in allies)
                 {
-                    HealMenu.Add("autoHeal_" + a.BaseSkinName, new CheckBox("Usar Heal nos champs " + a.BaseSkinName));
+                    HealMenu.Add("autoHeal_" + a.BaseSkinName, new CheckBox("Use Heal on Allys " + a.BaseSkinName));
                 }
                 
 
@@ -142,10 +142,10 @@ namespace KKayle
                 //----------//
                 DrawMenu = Menu.AddSubMenu("Draws", "DrawKayle");
                 // DrawMenu.Add("drawDisable", new CheckBox("Desabilidatar todos os Draw", false));
-                DrawMenu.Add("drawAA", new CheckBox("Desable Draw do AA", true));
-                DrawMenu.Add("drawQ", new CheckBox("Desable Draw do Q", true));
-                DrawMenu.Add("drawW", new CheckBox("Desable Draw do W", true));
-                DrawMenu.Add("drawE", new CheckBox("Desabile Draw do E", true));
+                DrawMenu.Add("drawAA", new CheckBox("Disable Draw do AA", true));
+                DrawMenu.Add("drawQ", new CheckBox("Disable Draw do Q", true));
+                DrawMenu.Add("drawW", new CheckBox("Disable Draw do W", true));
+                DrawMenu.Add("drawE", new CheckBox("Disabile Draw do E", true));
             }
             catch (Exception e)
             {
