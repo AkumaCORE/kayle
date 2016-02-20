@@ -115,7 +115,7 @@ namespace KKayle
                 HealMenu = Menu.AddSubMenu("Heal", "HealKayle");
                 HealMenu.Add("autoW", new CheckBox("Use W automatic", true));
                 HealMenu.Add("HealSelf", new Slider("Self W when % HP", 50));
-                HealMenu.Add("HealAlly", new Slider("Heal Ally when % HP", 50));
+                HealMenu.Add("HealAlly", new Slider("Heal Allys when % HP", 50));
                 foreach (var a in allies)
                 {
                     HealMenu.Add("autoHeal_" + a.BaseSkinName, new CheckBox("Use Heal on Allys " + a.BaseSkinName));
