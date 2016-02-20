@@ -136,6 +136,12 @@ namespace KKayle
 
             var Q = Program.Q;
             var W = Program.W;
+            var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
+            if (Q.IsReady() && Q.IsInRange(alvo))
+            {
+                Q.Cast(alvo);
+
+            }
             if (W.IsReady())
             {
                 W.Cast(Player.Instance);
