@@ -206,7 +206,7 @@ namespace KGragas
                 W.Cast();
 
             }
-            if (E.IsReady() && E.IsInRange(jungleMonsters) && Program.ModesMenu1["JungE"].Cast<CheckBox>().CurrentValue)
+            if (E.IsReady() && E.IsInRange(jungleMonsters) && Program.ModesMenu2["JungE"].Cast<CheckBox>().CurrentValue)
             {
                 E.Cast(jungleMonsters);
 
