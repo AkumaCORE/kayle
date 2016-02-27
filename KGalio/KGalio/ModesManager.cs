@@ -18,6 +18,12 @@ namespace KGalio
             if (Program._Player.HasBuff("GalioIdolOfDurand"))
             {
                 Orbwalker.DisableMovement = true;
+                
+            }
+            else
+            {
+                Orbwalker.DisableMovement = false;
+
             }
             var Q = Program.Q;
             var W = Program.W;
