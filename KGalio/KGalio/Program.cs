@@ -47,7 +47,7 @@ namespace KGalio
             //GameObject.OnCreate += Game_ObjectCreate;
             //GameObject.OnDelete += Game_OnDelete;
             //Orbwalker.OnPostAttack += Reset;
-            //Game.OnTick += Game_OnTick;
+            Game.OnTick += Game_OnTick;
             //Interrupter.OnInterruptableSpell += KInterrupter;
             //Gapcloser.OnGapcloser += KGapCloser;
 
