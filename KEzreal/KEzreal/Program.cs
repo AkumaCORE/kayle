@@ -60,6 +60,7 @@ namespace KEzreal
                 }
 
                 Q = new Spell.Skillshot(SpellSlot.Q, 1050, SkillShotType.Linear, 250, 1550, 60);
+                Q.AllowedCollisionCount = 0;
                 W = new Spell.Skillshot(SpellSlot.W,1000,SkillShotType.Linear,250,1550,80);
                 W.AllowedCollisionCount = int.MaxValue;
                 E = new Spell.Skillshot(SpellSlot.E,475,SkillShotType.Linear,250,2000,100);
@@ -179,7 +180,10 @@ namespace KEzreal
         }
         static void Game_OnUpdate(EventArgs args)
         {
-
+            if (!(ModesMenu1["autoQ"].Cast<CheckBox>().CurrentValue))
+            {
+                ModesManager.AutoQ();
+            }
             
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
@@ -215,10 +219,7 @@ namespace KEzreal
         }
         public static void Game_OnTick(EventArgs args)
         {
-            if (!(ModesMenu1["autoQ"].Cast<CheckBox>().CurrentValue))
-            {
-                ModesManager.AutoQ();
-            }
+            
 
             ModesManager.KillSteal();
 
