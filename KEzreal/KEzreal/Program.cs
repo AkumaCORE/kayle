@@ -170,13 +170,12 @@ namespace KEzreal
                     Circle.Draw(Color.Aqua, E.Range, Player.Instance.Position);
                 }
             }
-            if (DrawMenu["drawR"].Cast<CheckBox>().CurrentValue)
-            {
+          
                 if (R.IsReady() && R.IsLearned)
                 {
                     Circle.Draw(Color.Black, R.Range, Player.Instance.Position);
                 }
-            }
+            
         }
         static void Game_OnUpdate(EventArgs args)
         {
