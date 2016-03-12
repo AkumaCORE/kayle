@@ -59,6 +59,16 @@ namespace KEzreal
                     return;
                 }
 
+                Q = new Spell.Skillshot(SpellSlot.Q, 1050, SkillShotType.Linear, 250, 1550, 60);
+                W = new Spell.Skillshot(SpellSlot.W,1000,SkillShotType.Linear,250,1550,80);
+                W.AllowedCollisionCount = int.MaxValue;
+                E = new Spell.Skillshot(SpellSlot.E,475,SkillShotType.Linear,250,2000,100);
+                E.AllowedCollisionCount = int.MaxValue;
+                R= new Spell.Skillshot(SpellSlot.R,3000,SkillShotType.Linear,1000,2000,160);
+                R.AllowedCollisionCount = int.MaxValue;
+
+
+
                 Bootstrap.Init(null);
                 Chat.Print("KEzreal Addon Loading Success", Color.Green);
 
@@ -80,12 +90,7 @@ namespace KEzreal
                 ModesMenu1.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu1.Add("ComboE", new CheckBox("Use E on Combo", true));
                 ModesMenu1.Add("ComboR", new CheckBox("Use R on Combo", true));
-                ModesMenu1.AddSeparator();
-                ModesMenu1.AddLabel("Use R only on:");
-                foreach (var a in Enemies)
-                {
-                    ModesMenu1.Add("Ult_" + a.BaseSkinName, new CheckBox(a.BaseSkinName));
-                }
+        
                 ModesMenu1.Add("useI", new CheckBox("Use Itens on Combo", true));
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Harass Configs");
@@ -95,6 +100,8 @@ namespace KEzreal
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Kill Steal Configs");
                 ModesMenu1.Add("KQ", new CheckBox("Use Q on KillSteal", true));
+                ModesMenu1.Add("KW", new CheckBox("Use Q on KillSteal", true));
+                ModesMenu1.Add("KR", new CheckBox("Use Q on KillSteal", true));
 
                 ModesMenu2 = Menu.AddSubMenu("Lane/Jungle/Last", "Modes2Ezreal");
                 ModesMenu2.AddLabel("LastHit Configs");
@@ -103,12 +110,9 @@ namespace KEzreal
                 ModesMenu2.AddLabel("Lane Clear Config");
                 ModesMenu2.Add("ManaF", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("FarmQ", new CheckBox("Use Q on LaneClear", true));
-                ModesMenu2.Add("FarmW", new CheckBox("Use W on LaneClear", true));
-                ModesMenu2.Add("MinionW", new Slider("Use W when count minions more than :", 3, 1, 5));
                 ModesMenu2.AddLabel("Jungle Clear Config");
                 ModesMenu2.Add("ManaJ", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu2.Add("JungQ", new CheckBox("Use Q on ungle", true));
-                ModesMenu2.Add("JungW", new CheckBox("Use W on Jungle", true));
 
 
 
@@ -118,15 +122,15 @@ namespace KEzreal
                 DrawMenu = Menu.AddSubMenu("Draws", "DrawEzreal");
                 DrawMenu.Add("drawAA", new CheckBox("Draw do AA", true));
                 DrawMenu.Add("drawQ", new CheckBox(" Draw do Q", true));
+                DrawMenu.Add("drawW", new CheckBox(" Draw do W", true));
                 DrawMenu.Add("drawE", new CheckBox(" Draw do E", true));
-                DrawMenu.Add("drawR", new CheckBox(" Draw do R", true));
                 //------------//
                 //-Misc Menu-//
                 //----------//
-                Misc = Menu.AddSubMenu("MiscMenu", "Misc");
+               /* Misc = Menu.AddSubMenu("MiscMenu", "Misc");
                 Misc.Add("useEGapCloser", new CheckBox("E on GapCloser", true));
                 Misc.Add("useEInterrupter", new CheckBox("use E to Interrupt", true));
-                Misc.Add("resetAA", new CheckBox("Reset AA"));
+                Misc.Add("resetAA", new CheckBox("Reset AA"));*/
             }
 
             catch (Exception e)
@@ -134,6 +138,68 @@ namespace KEzreal
                 Chat.Print("KEzreal: Exception occured while Initializing Addon. Error: " + e.Message);
 
             }
+
+        }
+        private static void Game_OnDraw(EventArgs args)
+        {
+
+            Circle.Draw(Color.Red, _Player.GetAutoAttackRange(), Player.Instance.Position);
+            if (Q.IsReady() && Q.IsLearned)
+            {
+                Circle.Draw(Color.White, Q.Range, Player.Instance.Position);
+            }
+            if (W.IsReady() && W.IsLearned)
+            {
+                Circle.Draw(Color.Green, W.Range, Player.Instance.Position);
+            }
+            if (E.IsReady() && E.IsLearned)
+            {
+                Circle.Draw(Color.Aqua, E.Range, Player.Instance.Position);
+            }
+            if (R.IsReady() && R.IsLearned)
+            {
+                Circle.Draw(Color.Black, R.Range, Player.Instance.Position);
+            }
+        }
+        static void Game_OnUpdate(EventArgs args)
+        {
+
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+            {
+                ModesManager.Combo();
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
+            {
+                ModesManager.Harass();
+            }
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+            {
+
+                ModesManager.LaneClear();
+
+            }
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+            {
+
+                ModesManager.JungleClear();
+            }
+
+
+
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit))
+            {
+                ModesManager.LastHit();
+
+            }
+
+
+
+        }
+        public static void Game_OnTick(EventArgs args)
+        {
+            ModesManager.KillSteal();
 
         }
     }
