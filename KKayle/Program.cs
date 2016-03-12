@@ -34,6 +34,7 @@ namespace KKayle
             return (PlayerInstance.Health / PlayerInstance.MaxHealth) * 100;
         }
 
+
         public static AIHeroClient _Player
         {
             get { return ObjectManager.Player; }
