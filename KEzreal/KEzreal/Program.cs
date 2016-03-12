@@ -104,8 +104,8 @@ namespace KEzreal
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Kill Steal Configs");
                 ModesMenu1.Add("KQ", new CheckBox("Use Q on KillSteal", true));
-                ModesMenu1.Add("KW", new CheckBox("Use Q on KillSteal", true));
-                ModesMenu1.Add("KR", new CheckBox("Use Q on KillSteal", true));
+                ModesMenu1.Add("KW", new CheckBox("Use W on KillSteal", true));
+                ModesMenu1.Add("KR", new CheckBox("Use R on KillSteal", true));
 
                 ModesMenu2 = Menu.AddSubMenu("Lane/Jungle/Last", "Modes2Ezreal");
                 ModesMenu2.AddLabel("LastHit Configs");

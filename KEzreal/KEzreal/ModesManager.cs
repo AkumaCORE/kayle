@@ -80,7 +80,7 @@ namespace KEzreal
                 W.Cast(Wp.CastPosition);
 
             }
-            if (E.IsInRange(alvo) && E.IsReady() && useE && Ep.HitChance >= HitChance.High)
+            if ((_Player.Distance(alvo) <= 1100) && E.IsReady() && useE && Ep.HitChance >= HitChance.High)
             {
                 E.Cast(Ep.CastPosition);
             }
