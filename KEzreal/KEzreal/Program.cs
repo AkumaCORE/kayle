@@ -203,7 +203,7 @@ namespace KEzreal
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
             {
 
-                ModesManager.JungleClear();
+                //ModesManager.JungleClear();
             }
 
 
@@ -221,7 +221,7 @@ namespace KEzreal
         {
             
 
-            ModesManager.KillSteal();
+           // ModesManager.KillSteal();
 
         }
     }

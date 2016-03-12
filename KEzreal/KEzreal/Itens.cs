@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace KEzreal
 {
-    internal class Itens
+    internal class Itens : Program
     {//itens
 
         public static readonly Item Youmuu = new Item((int)ItemId.Youmuus_Ghostblade);
@@ -23,7 +23,7 @@ namespace KEzreal
         {
             var E = Program.E;
             var alvo = TargetSelector.GetTarget((E.Range + 300), DamageType.Physical);
-            if (Program._Player.Distance(alvo) <= E.Range + 300)
+            if (Program._Player.Distance(alvo) <= Q.Range)
             {
                 if (Youmuu.IsOwned())
                 {

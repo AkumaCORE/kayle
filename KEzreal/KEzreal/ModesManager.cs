@@ -14,9 +14,10 @@ namespace KEzreal
     {
         public static void Combo()
         {
-           // var Elogic = aa;
-            
+            // var Elogic = aa;
+
             var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+            if (alvo == null) return;
             var useQ = ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue;
             var useW = ModesMenu1["ComboW"].Cast<CheckBox>().CurrentValue;
             var useE = ModesMenu1["ComboE"].Cast<CheckBox>().CurrentValue;
@@ -28,33 +29,35 @@ namespace KEzreal
             if (!alvo.IsValid()) return;
             if (ModesMenu1["useI"].Cast<CheckBox>().CurrentValue)
             {
-                Itens.UseItens();
+                //Itens.UseItens();
             }
 
+           
+                if (Q.IsInRange(alvo) && Q.IsReady() && useQ && Qp.HitChance >= HitChance.High)
+                {
+                    Q.Cast(Qp.CastPosition);
+                }
+                if (W.IsInRange(alvo) && W.IsReady() && useW && Wp.HitChance >= HitChance.High)
+                {
+                    W.Cast(Wp.CastPosition);
 
-            if (Q.IsInRange(alvo) && Q.IsReady() && useQ && Qp.HitChance >= HitChance.High )
-            {
-                Q.Cast(Qp.CastPosition);
+                }
+                if ((_Player.Distance(alvo) <= 1100) && E.IsReady() && useE)
+                {
+                    E.Cast(Game.CursorPos);
+                }
+                if (R.IsInRange(alvo) && R.IsReady() && useR)
+                {
+                    R.Cast(Rp.CastPosition);
+                }
             }
-            if (W.IsInRange(alvo) && W.IsReady() && useW && Wp.HitChance >= HitChance.High)
-            {
-                W.Cast(Wp.CastPosition);
-
-            }
-            if ((_Player.Distance(alvo) <= 1100) && E.IsReady() && useE && Ep.HitChance >= HitChance.High)
-            {
-                E.Cast(Game.CursorPos);
-            }
-            if (R.IsInRange(alvo) && R.IsReady() && useR)
-            {
-                R.Cast(alvo);
-            }
-        }
+        
         public static void Harass()
         {
             //Harass
 
             var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+            if (alvo == null) return;
             var alvoR = TargetSelector.GetTarget(R.Range, DamageType.Physical);
             var useQ = ModesMenu1["HarassQ"].Cast<CheckBox>().CurrentValue;
             var useW = ModesMenu1["HarassW"].Cast<CheckBox>().CurrentValue;
@@ -64,10 +67,10 @@ namespace KEzreal
             var Wp = W.GetPrediction(alvo);
             var Ep = E.GetPrediction(alvo);
             var Rp = R.GetPrediction(alvoR);
-            if (!alvo.IsValid()) return;
+            if (!alvo.IsValid() && alvo == null) return;
             if (ModesMenu1["useI"].Cast<CheckBox>().CurrentValue)
             {
-                //Itens.UseItens();
+                Itens.UseItens();
             }
 
 
@@ -113,6 +116,7 @@ namespace KEzreal
              var useW = ModesMenu2["JungW"].Cast<CheckBox>().CurrentValue;
              var jungleMonsters = EntityManager.MinionsAndMonsters.GetJungleMonsters().OrderByDescending(j => j.Health).FirstOrDefault(j => j.IsValidTarget(Program.W.Range));
              var minioon = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, Program.W.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
+             if (jungleMonsters == null) return; 
              if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaJ"].Cast<Slider>().CurrentValue))
              {
                  return;
