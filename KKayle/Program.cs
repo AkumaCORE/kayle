@@ -76,7 +76,7 @@ namespace KKayle
                 Q = new Spell.Targeted(SpellSlot.Q, 650);
                     Q.CastDelay = 5;
                 W = new Spell.Targeted(SpellSlot.W, 900);
-                E = new Spell.Skillshot(SpellSlot.E, 650, SkillShotType.Circular, 1, 50, 400);
+                E = new Spell.Skillshot(SpellSlot.E, 650, SkillShotType.Circular,1 , 1, 600);
                 R = new Spell.Targeted(SpellSlot.R, 900);
                 if (Spell1("ignite"))   
                 {

@@ -90,6 +90,9 @@ namespace KEzreal
                 ModesMenu1.Add("ComboW", new CheckBox("Use W on Combo", true));
                 ModesMenu1.Add("ComboE", new CheckBox("Use E on Combo", true));
                 ModesMenu1.Add("ComboR", new CheckBox("Use R on Combo", true));
+                ModesMenu1.AddSeparator();
+                ModesMenu1.Add("autoQ", new CheckBox("Auto Q on Enemy", false));
+
         
                 ModesMenu1.Add("useI", new CheckBox("Use Itens on Combo", true));
                 ModesMenu1.AddSeparator();
@@ -142,29 +145,42 @@ namespace KEzreal
         }
         private static void Game_OnDraw(EventArgs args)
         {
-
+            if ( DrawMenu["drawAA"].Cast<CheckBox>().CurrentValue){
             Circle.Draw(Color.Red, _Player.GetAutoAttackRange(), Player.Instance.Position);
-            if (Q.IsReady() && Q.IsLearned)
-            {
-                Circle.Draw(Color.White, Q.Range, Player.Instance.Position);
             }
-            if (W.IsReady() && W.IsLearned)
+            if (DrawMenu["drawQ"].Cast<CheckBox>().CurrentValue)
             {
-                Circle.Draw(Color.Green, W.Range, Player.Instance.Position);
+                if (Q.IsReady() && Q.IsLearned)
+                {
+                    Circle.Draw(Color.White, Q.Range, Player.Instance.Position);
+                }
             }
-            if (E.IsReady() && E.IsLearned)
+            if (DrawMenu["drawW"].Cast<CheckBox>().CurrentValue)
             {
-                Circle.Draw(Color.Aqua, E.Range, Player.Instance.Position);
+                if (W.IsReady() && W.IsLearned)
+                {
+                    Circle.Draw(Color.Green, W.Range, Player.Instance.Position);
+                }
             }
-            if (R.IsReady() && R.IsLearned)
+            if (DrawMenu["drawE"].Cast<CheckBox>().CurrentValue)
             {
-                Circle.Draw(Color.Black, R.Range, Player.Instance.Position);
+                if (E.IsReady() && E.IsLearned)
+                {
+                    Circle.Draw(Color.Aqua, E.Range, Player.Instance.Position);
+                }
+            }
+            if (DrawMenu["drawR"].Cast<CheckBox>().CurrentValue)
+            {
+                if (R.IsReady() && R.IsLearned)
+                {
+                    Circle.Draw(Color.Black, R.Range, Player.Instance.Position);
+                }
             }
         }
         static void Game_OnUpdate(EventArgs args)
         {
 
-
+            
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 ModesManager.Combo();
@@ -199,6 +215,11 @@ namespace KEzreal
         }
         public static void Game_OnTick(EventArgs args)
         {
+            if (!(ModesMenu1["autoQ"].Cast<CheckBox>().CurrentValue))
+            {
+                ModesManager.AutoQ();
+            }
+
             ModesManager.KillSteal();
 
         }

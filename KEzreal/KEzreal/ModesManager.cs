@@ -177,5 +177,22 @@ namespace KEzreal
                  }
              }
          }
+         public static void AutoQ()
+         {
+             var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+             var useQ = ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue;
+             var useW = ModesMenu1["ComboW"].Cast<CheckBox>().CurrentValue;
+             var useE = ModesMenu1["ComboE"].Cast<CheckBox>().CurrentValue;
+             var useR = ModesMenu1["ComboR"].Cast<CheckBox>().CurrentValue;
+             var Qp = Q.GetPrediction(alvo);
+             var Wp = W.GetPrediction(alvo);
+             var Ep = E.GetPrediction(alvo);
+             var Rp = R.GetPrediction(alvo);
+             if (!alvo.IsValid()) return;
+             if (Q.IsInRange(alvo) && Q.IsReady() && useQ && Qp.HitChance >= HitChance.High)
+             {
+                 Q.Cast(Qp.CastPosition);
+             }
+         }
     }
 }
