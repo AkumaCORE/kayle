@@ -100,7 +100,7 @@ namespace KEzreal
                 ModesMenu1.AddLabel("Harass Configs");
                 ModesMenu1.Add("ManaH", new Slider("Dont use Skills if Mana <=", 40));
                 ModesMenu1.Add("HarassQ", new CheckBox("Use Q on Harass", true));
-                ModesMenu1.Add("HarassW", new CheckBox("Use W on Harass", true));
+                ModesMenu1.Add("HarassW", new CheckBox("Use W on Harass", true) );
                 ModesMenu1.AddSeparator();
                 ModesMenu1.AddLabel("Kill Steal Configs");
                 ModesMenu1.Add("KQ", new CheckBox("Use Q on KillSteal", true));

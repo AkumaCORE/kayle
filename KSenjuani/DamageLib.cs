@@ -24,7 +24,7 @@ namespace KSejuani
         public static float ECalc(Obj_AI_Base target)
         {
             return _Player.CalculateDamageOnUnit(target, DamageType.Magical,
-                (float)(new[] { 0, 60, 90, 120, 150, 180 }[Program.E.Level] + 0.5f * _Player.FlatMagicDamageMod
+                (float)(new[] { 0, 80, 105, 130, 155, 180 }[Program.E.Level] + 0.5f * _Player.FlatMagicDamageMod
                     ));
         }
 
