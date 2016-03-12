@@ -14,7 +14,7 @@ namespace KEzreal
     {
         public static void Combo()
         {
-            //combo
+           // var Elogic = aa;
             
             var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
             var useQ = ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue;
@@ -41,9 +41,9 @@ namespace KEzreal
                 W.Cast(Wp.CastPosition);
 
             }
-            if (E.IsInRange(alvo) && E.IsReady() && useE && Ep.HitChance >= HitChance.High)
+            if ((_Player.Distance(alvo) <= 1100) && E.IsReady() && useE && Ep.HitChance >= HitChance.High)
             {
-                E.Cast(Ep.CastPosition);
+                E.Cast(Game.CursorPos);
             }
             if (R.IsInRange(alvo) && R.IsReady() && useR)
             {
@@ -117,10 +117,11 @@ namespace KEzreal
              {
                  return;
              }
+             var Qp = Q.GetPrediction(jungleMonsters    );
              if (jungleMonsters == null) return;
              if (useQ && Q.IsReady() && Q.IsInRange(jungleMonsters))
              {
-                 Q.Cast(jungleMonsters);
+                 Q.Cast(Qp.CastPosition);
              }
     
          }
