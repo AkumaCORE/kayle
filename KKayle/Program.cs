@@ -20,7 +20,7 @@ namespace KKayle
 
         public static Spell.Targeted Q;
         public static Spell.Targeted W;
-        public static Spell.Skillshot E;
+        public static Spell.Active E;
         public static Spell.Targeted R;
         private static Spell.Targeted Ignite;
 
@@ -77,7 +77,7 @@ namespace KKayle
                 Q = new Spell.Targeted(SpellSlot.Q, 650);
                     Q.CastDelay = 5;
                 W = new Spell.Targeted(SpellSlot.W, 900);
-                E = new Spell.Skillshot(SpellSlot.E, 650, SkillShotType.Circular,1 , 1, 600);
+                E = new Spell.Active(SpellSlot.E, 600);
                 R = new Spell.Targeted(SpellSlot.R, 900);
                 if (Spell1("ignite"))   
                 {

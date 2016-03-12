@@ -33,7 +33,7 @@ namespace KKayle
             }
             if (E.IsReady() && E.IsInRange(alvo))
             {
-                E.Cast(alvo);
+                E.Cast();
             }
         }
 
@@ -59,7 +59,7 @@ namespace KKayle
             }
             if (E.IsReady() && (E.IsInRange(alvo)) && Program.HarassMenu["HarassE"].Cast<CheckBox>().CurrentValue)
             {
-                E.Cast(alvo);
+                E.Cast();
             }
         }
 
@@ -84,7 +84,7 @@ namespace KKayle
                                }
             if (E.IsReady() && Program.FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue /*&& (Cminion >= Program.FarmMenu["MinionE"].Cast<Slider>().CurrentValue)*/)
             {
-                E.Cast(minion);
+                E.Cast();
             }
 
         }
@@ -109,7 +109,7 @@ namespace KKayle
 
                 if (E.IsReady() && Program.FarmMenu["FarmE"].Cast<CheckBox>().CurrentValue && jungleMonsters.IsValidTarget(Q.Range))
                 {
-                    E.Cast(jungleMonsters);
+                    E.Cast();
                 }
 
             }
