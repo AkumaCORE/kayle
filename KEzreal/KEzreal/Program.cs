@@ -179,8 +179,8 @@ namespace KEzreal
         }
         static void Game_OnUpdate(EventArgs args)
         {
-            var AutoQ = ModesMenu1["autoQ"].Cast<CheckBox>().CurrentValue;
-            if (!AutoQ)
+            var AutooQ = ModesMenu1["autoQ"].Cast<CheckBox>().CurrentValue;
+            if (!AutooQ)
             {
                 ModesManager.AutoQ();
             }
@@ -221,7 +221,7 @@ namespace KEzreal
         {
             
 
-           // ModesManager.KillSteal();
+            ModesManager.KillSteal();
 
         }
     }

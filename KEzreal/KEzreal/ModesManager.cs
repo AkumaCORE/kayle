@@ -64,10 +64,10 @@ namespace KEzreal
             var Qp = Q.GetPrediction(alvo);
             var Wp = W.GetPrediction(alvo);
             if (!alvo.IsValid() && alvo == null) return;
-            if (ModesMenu1["useI"].Cast<CheckBox>().CurrentValue)
+            /*if (ModesMenu1["useI"].Cast<CheckBox>().CurrentValue)
             {
                 Itens.UseItens();
-            }
+            }*/
 
 
             if (Q.IsInRange(alvo) && Q.IsReady() && useQ && Qp.HitChance >= HitChance.High)
@@ -140,29 +140,30 @@ namespace KEzreal
              foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && !a.IsZombie && a.Health > 0))
              {
                  if (enemy == null) return;
-                 var Qp = Q.GetPrediction(enemy);
-                 var Wp = W.GetPrediction(enemy);
-                 var Ep = E.GetPrediction(enemy);
-                 var Rp = R.GetPrediction(enemy);
+              
             
                  if (enemy.IsValidTarget(R.Range) && enemy.HealthPercent <= 40)
                  {
 
                      if (DamageLib.QCalc(enemy) + DamageLib.WCalc(enemy) + DamageLib.RCalc(enemy)>= enemy.Health)
                      {
-                         if (Q.IsReady() && Q.IsInRange(enemy) && Program.ModesMenu1["KQ"].Cast<CheckBox>().CurrentValue)
+                         var Qp = Q.GetPrediction(enemy);
+                         var Wp = W.GetPrediction(enemy);
+                         var Ep = E.GetPrediction(enemy);
+                         var Rp = R.GetPrediction(enemy);
+                         if (Q.IsReady() && Q.IsInRange(enemy) && Program.ModesMenu1["KQ"].Cast<CheckBox>().CurrentValue && Qp.HitChancePercent >= 90)
                          {
                              Q.Cast(Qp.CastPosition);
                          }
-                         if (W.IsReady() && W.IsInRange(enemy) && Program.ModesMenu1["KW"].Cast<CheckBox>().CurrentValue)
+                         if (W.IsReady() && W.IsInRange(enemy) && Program.ModesMenu1["KW"].Cast<CheckBox>().CurrentValue && Wp.HitChancePercent >= 90)
                          {
                              W.Cast(Wp.CastPosition);
                          }
-                         if (E.IsReady() && E.IsInRange(enemy) && Program.ModesMenu1["KE"].Cast<CheckBox>().CurrentValue)
+                         if (E.IsReady() && E.IsInRange(enemy) && Program.ModesMenu1["KE"].Cast<CheckBox>().CurrentValue && Ep.HitChancePercent >= 90)
                          {
                              E.Cast(Ep.CastPosition);
                          }
-                         if (R.IsReady() && R.IsInRange(enemy) && Program.ModesMenu1["KR"].Cast<CheckBox>().CurrentValue)
+                         if (R.IsReady() && R.IsInRange(enemy) && Program.ModesMenu1["KR"].Cast<CheckBox>().CurrentValue && Rp.HitChancePercent >= 90)
                          {
                              R.Cast(Rp.CastPosition);
                          }
