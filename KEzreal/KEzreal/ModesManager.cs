@@ -113,15 +113,14 @@ namespace KEzreal
          {
 
              var useQ = ModesMenu2["JungQ"].Cast<CheckBox>().CurrentValue;
-             var useW = ModesMenu2["JungW"].Cast<CheckBox>().CurrentValue;
-             var jungleMonsters = EntityManager.MinionsAndMonsters.GetJungleMonsters().OrderByDescending(j => j.Health).FirstOrDefault(j => j.IsValidTarget(Program.W.Range));
-             var minioon = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, Program.W.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
+             var jungleMonsters = EntityManager.MinionsAndMonsters.GetJungleMonsters().OrderByDescending(j => j.Health).FirstOrDefault(j => j.IsValidTarget(Program.Q.Range));
+             var minioon = EntityManager.MinionsAndMonsters.EnemyMinions.Where(t => t.IsInRange(Player.Instance.Position, Program.Q.Range) && !t.IsDead && t.IsValid && !t.IsInvulnerable).Count();
              if (jungleMonsters == null) return; 
              if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaJ"].Cast<Slider>().CurrentValue))
              {
                  return;
              }
-             var Qp = Q.GetPrediction(jungleMonsters    );
+             var Qp = Q.GetPrediction(jungleMonsters);
              if (jungleMonsters == null) return;
              if (useQ && Q.IsReady() && Q.IsInRange(jungleMonsters))
              {
@@ -133,7 +132,7 @@ namespace KEzreal
          {
 
              var useQ = Program.ModesMenu2["LastQ"].Cast<CheckBox>().CurrentValue;
-             var qminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget((Program.W.Range)) && (DamageLib.QCalc(m) > m.Health));
+             var qminions = EntityManager.MinionsAndMonsters.EnemyMinions.FirstOrDefault(m => m.IsValidTarget((Program.Q.Range)) && (DamageLib.QCalc(m) > m.Health));
              if (qminions == null) return;
              if ((Program._Player.ManaPercent <= Program.ModesMenu2["ManaL"].Cast<Slider>().CurrentValue))
              {
@@ -152,6 +151,7 @@ namespace KEzreal
             
              foreach (var enemy in EntityManager.Heroes.Enemies.Where(a => !a.IsDead && !a.IsZombie && a.Health > 0))
              {
+                 if (enemy == null) return;
                  var Qp = Q.GetPrediction(enemy);
                  var Wp = W.GetPrediction(enemy);
                  var Ep = E.GetPrediction(enemy);
@@ -160,7 +160,7 @@ namespace KEzreal
                  if (enemy.IsValidTarget(R.Range) && enemy.HealthPercent <= 40)
                  {
 
-                     if (DamageLib.QCalc(enemy) >= enemy.Health)
+                     if (DamageLib.QCalc(enemy) + DamageLib.WCalc(enemy) + DamageLib.RCalc(enemy)>= enemy.Health)
                      {
                          if (Q.IsReady() && Q.IsInRange(enemy) && Program.ModesMenu1["KQ"].Cast<CheckBox>().CurrentValue)
                          {
@@ -185,6 +185,7 @@ namespace KEzreal
          public static void AutoQ()
          {
              var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
+             if (alvo == null) return;
              var useQ = ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue;
              var useW = ModesMenu1["ComboW"].Cast<CheckBox>().CurrentValue;
              var useE = ModesMenu1["ComboE"].Cast<CheckBox>().CurrentValue;

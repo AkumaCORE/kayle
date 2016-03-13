@@ -203,7 +203,7 @@ namespace KEzreal
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
             {
 
-                //ModesManager.JungleClear();
+                ModesManager.JungleClear();
             }
 
 
