@@ -61,12 +61,8 @@ namespace KEzreal
             var alvoR = TargetSelector.GetTarget(R.Range, DamageType.Physical);
             var useQ = ModesMenu1["HarassQ"].Cast<CheckBox>().CurrentValue;
             var useW = ModesMenu1["HarassW"].Cast<CheckBox>().CurrentValue;
-            var useE = ModesMenu1["HarassE"].Cast<CheckBox>().CurrentValue;
-            var useR = ModesMenu1["HarassR"].Cast<CheckBox>().CurrentValue;
             var Qp = Q.GetPrediction(alvo);
             var Wp = W.GetPrediction(alvo);
-            var Ep = E.GetPrediction(alvo);
-            var Rp = R.GetPrediction(alvoR);
             if (!alvo.IsValid() && alvo == null) return;
             if (ModesMenu1["useI"].Cast<CheckBox>().CurrentValue)
             {
@@ -83,14 +79,6 @@ namespace KEzreal
                 W.Cast(Wp.CastPosition);
 
             }
-            if ((_Player.Distance(alvo) <= 1100) && E.IsReady() && useE && Ep.HitChance >= HitChance.High)
-            {
-                E.Cast(Ep.CastPosition);
-            }
-            if (R.IsInRange(alvo) && R.IsReady() && useR && Rp.HitChance >= HitChance.High)
-             {
-                 R.Cast(Rp.CastPosition);
-             }
         }
          public static void LaneClear()
         {
