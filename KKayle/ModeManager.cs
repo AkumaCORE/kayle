@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace KKayle
 {
-    public class ModeManager : Program
+   internal class ModeManager : Program
     {
 
 
