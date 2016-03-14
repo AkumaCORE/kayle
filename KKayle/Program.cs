@@ -77,7 +77,7 @@ namespace KKayle
                 Q = new Spell.Targeted(SpellSlot.Q, 650);
                     Q.CastDelay = 5;
                 W = new Spell.Targeted(SpellSlot.W, 900);
-                E = new Spell.Active(SpellSlot.E, 600);
+                E = new Spell.Active(SpellSlot.E, 650);
                 R = new Spell.Targeted(SpellSlot.R, 900);
                 if (Spell1("ignite"))   
                 {
@@ -271,6 +271,14 @@ namespace KKayle
             {
                 OnDamage = true;
             }*/
+
+        }
+        static void KInterrupter(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
+        {
+            if (args.DangerLevel == DangerLevel.High && sender.IsEnemy && sender is AIHeroClient && sender.Distance(_Player) < R.Range && R.IsReady())
+            {
+                R.Cast(Player.Instance);
+            }
 
         }
 
