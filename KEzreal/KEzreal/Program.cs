@@ -179,11 +179,6 @@ namespace KEzreal
         }
         static void Game_OnUpdate(EventArgs args)
         {
-            var AutooQ = ModesMenu1["autoQ"].Cast<CheckBox>().CurrentValue;
-            if (!AutooQ)
-            {
-                ModesManager.AutoQ();
-            }
             
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
@@ -219,8 +214,8 @@ namespace KEzreal
         }
         public static void Game_OnTick(EventArgs args)
         {
-            
 
+            ModesManager.AutoQ();
             ModesManager.KillSteal();
 
         }

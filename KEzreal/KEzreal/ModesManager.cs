@@ -173,6 +173,7 @@ namespace KEzreal
          }
          public static void AutoQ()
          {
+             var turnQ = ModesMenu1["autoQ"].Cast<CheckBox>().CurrentValue;
              var alvo = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
              if (alvo == null) return;
              var useQ = ModesMenu1["ComboQ"].Cast<CheckBox>().CurrentValue;
@@ -184,7 +185,7 @@ namespace KEzreal
              var Ep = E.GetPrediction(alvo);
              var Rp = R.GetPrediction(alvo);
              if (!alvo.IsValid()) return;
-             if (Q.IsInRange(alvo) && Q.IsReady() && useQ && Qp.HitChance >= HitChance.High)
+             if (Q.IsInRange(alvo) && Q.IsReady() && (!turnQ) && useQ && Qp.HitChance >= HitChance.High)
              {
                  Q.Cast(Qp.CastPosition);
              }
